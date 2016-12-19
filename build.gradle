@@ -10,7 +10,7 @@ buildscript {
 }
 
 version "0.1"
-group "flowable"
+group "tools.blocks.flowable"
 
 apply plugin:"eclipse"
 apply plugin:"idea"
@@ -56,17 +56,17 @@ bootRun {
     jvmArgs = ['-Dspring.output.ansi.enabled=always']
 }// enable if you wish to package this plugin as a standalone application
 bootRepackage.enabled = false
+
 grailsPublish {
-    // TODO: Provide values here
     user = 'user'
     key = 'key'
-    githubSlug = 'foo/bar'
+    githubSlug = 'fgroch/flowable'
     license {
         name = 'Apache-2.0'
     }
-    title = "My Plugin"
-    desc = "Full plugin description"
-    developers = [johndoe:"John Doe"]
+    title = "Flowable Grails 3 plugin"
+    desc = "This plugin provides Grails integration with flowable BPM platform"
+    developers = [fgroch:"Filip Grochowski"]
     portalUser = ""
     portalPassword = ""    
 }

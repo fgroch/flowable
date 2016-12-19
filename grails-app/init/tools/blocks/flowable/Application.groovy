@@ -1,4 +1,4 @@
-package flowable
+package tools.blocks.flowable
 
 import grails.boot.*
 import grails.boot.config.GrailsAutoConfiguration

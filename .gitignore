@@ -35,7 +35,7 @@
 #gradle tasks files
 .gradle
 
-#build file
+#build files
 /build
 
 #ide files

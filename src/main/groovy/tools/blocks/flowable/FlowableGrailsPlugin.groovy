@@ -1,6 +1,9 @@
 package tools.blocks.flowable
 
 import grails.plugins.*
+import org.grails.datastore.gorm.jdbc.DataSourceBuilder
+
+//import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder
 
 class FlowableGrailsPlugin extends Plugin {
 
@@ -40,8 +43,27 @@ Brief summary/description of the plugin.
     // Online location of the plugin's browseable source code.
 //    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
 
-    Closure doWithSpring() { {->
-            // TODO Implement runtime spring config (optional)
+    Closure doWithSpring() {
+        {->
+            dataSource(org.springframework.jdbc.datasource.SimpleDriverDataSource) {
+                return DataSourceBuilder.create()
+                    .url("jdbc:postgresql://localhost:5432/blocks3")
+                    .username("postgres")
+                    .password("postgres")
+                    .driverClassName("org.postgresql.Driver")
+                    .build();
+            }
+            transactionManager(org.springframework.jdbc.datasource.DataSourceTransactionManager) {
+                dataSource = dataSource
+            }
+            processEngineConfiguration(org.flowable.spring.SpringProcessEngineConfiguration) {
+                transactionManager = transactionManager
+                dataSource = dataSource
+                databaseSchemaUpdate = true
+            }
+            processEngine(org.flowable.spring.ProcessEngineFactoryBean) {
+                processEngineConfiguration = processEngineConfiguration
+            }
         }
     }
 

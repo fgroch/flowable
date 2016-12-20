@@ -60,6 +60,7 @@ Brief summary/description of the plugin.
                 transactionManager = transactionManager
                 dataSource = dataSource
                 databaseSchemaUpdate = true
+                asyncExecutorActivate = false
             }
             processEngine(org.flowable.spring.ProcessEngineFactoryBean) {
                 processEngineConfiguration = processEngineConfiguration

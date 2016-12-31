@@ -45,13 +45,16 @@ Brief summary/description of the plugin.
 
     Closure doWithSpring() {
         {->
-            dataSource(org.springframework.jdbc.datasource.SimpleDriverDataSource) {
+            dataSource(org.springframework.jdbc.datasource.DriverManagerDataSource) {
                 return DataSourceBuilder.create()
-                    .url("jdbc:postgresql://localhost:5432/blocks3")
-                    .username("postgres")
-                    .password("postgres")
-                    .driverClassName("org.postgresql.Driver")
+                    .url("jdbc:h2:tcp://localhost/~/flowable")
+                    //.url("jdbc:h2:mem:flowable;DB_CLOSE_DELAY=1000")
+                    .username("sa")
+                    .password("")
+                    .driverClassName("org.h2.Driver")
                     .build();
+                //org.springframework.jdbc.datasource.DriverManagerDataSource
+                //org.springframework.jdbc.datasource.SimpleDriverDataSource
             }
             transactionManager(org.springframework.jdbc.datasource.DataSourceTransactionManager) {
                 dataSource = dataSource
@@ -61,10 +64,12 @@ Brief summary/description of the plugin.
                 dataSource = dataSource
                 databaseSchemaUpdate = true
                 asyncExecutorActivate = false
+                databaseSchemaUpdate = 'create-drop'
             }
             processEngine(org.flowable.spring.ProcessEngineFactoryBean) {
                 processEngineConfiguration = processEngineConfiguration
             }
+            repositoryService(processEngine: "getRepositoryService")
         }
     }
 

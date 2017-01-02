@@ -16,8 +16,8 @@ class FlowableGrailsPlugin extends Plugin {
 
     // TODO Fill in these fields
     def title = "Flowable" // Headline display name of the plugin
-    def author = "Your name"
-    def authorEmail = ""
+    def author = "Filip Grochowski"
+    def authorEmail = "fgroch@gmail.com"
     def description = '''\
 Brief summary/description of the plugin.
 '''
@@ -70,6 +70,9 @@ Brief summary/description of the plugin.
                 processEngineConfiguration = processEngineConfiguration
             }
             repositoryService(processEngine: "getRepositoryService")
+            taskService(processEngine: "getTaskService")
+            historyService(processEngine: "getHistoryService")
+            managementService(processEngine: "getManagementService")
         }
     }
 

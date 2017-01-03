@@ -1,0 +1,23 @@
+= flowable Grails plugin
+
+== Introduction to the flowable Files plugin
+
+This plugin provides integration with flowable BPM platform 
+
+== History
+
+=== Versions:
+* 0.1.0
+** Under development
+
+=== Roadmap
+
+* Version 0.1.0:
+** Flowable services exposed as a beans
+** Flowable engine embedded in Grails app
+** Deployments (searching, viewing, addition, removing, editing)
+** Process handling (starting, searching, viewing, termination)
+** Tasks execution
+** Forms and forms properties handling (TagLib + service)
+* Version 0.2.0:
+** Decision mechanism handling

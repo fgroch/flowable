@@ -1,7 +1,9 @@
 package tools.blocks.flowable
 
+import grails.config.Config
 import grails.plugins.*
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
+import org.springframework.context.annotation.Configuration
 
 //import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder
 
@@ -45,13 +47,15 @@ Brief summary/description of the plugin.
 
     Closure doWithSpring() {
         {->
+            final Config conf = grailsApplication.config
             dataSource(org.springframework.jdbc.datasource.DriverManagerDataSource) {
                 return DataSourceBuilder.create()
-                    .url("jdbc:h2:tcp://localhost/~/flowable")
+                    .url(conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.url"))
+                    //.url("jdbc:h2:tcp://localhost/~/flowable")
                     //.url("jdbc:h2:mem:flowable;DB_CLOSE_DELAY=1000")
-                    .username("sa")
-                    .password("")
-                    .driverClassName("org.h2.Driver")
+                    .username(conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.username"))
+                    .password(conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.password"))
+                    .driverClassName(conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.driverClassName"))
                     .build();
                 //org.springframework.jdbc.datasource.DriverManagerDataSource
                 //org.springframework.jdbc.datasource.SimpleDriverDataSource
@@ -64,7 +68,7 @@ Brief summary/description of the plugin.
                 dataSource = dataSource
                 databaseSchemaUpdate = true
                 asyncExecutorActivate = false
-                databaseSchemaUpdate = 'create-drop'
+                databaseSchemaUpdate = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.dbCreate")
             }
             processEngine(org.flowable.spring.ProcessEngineFactoryBean) {
                 processEngineConfiguration = processEngineConfiguration

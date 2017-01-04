@@ -69,6 +69,8 @@ Brief summary/description of the plugin.
                 databaseSchemaUpdate = true
                 asyncExecutorActivate = false
                 databaseSchemaUpdate = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.dbCreate")
+                deploymentResources = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentResources")
+                deploymentMode = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentMode")
             }
             processEngine(org.flowable.spring.ProcessEngineFactoryBean) {
                 processEngineConfiguration = processEngineConfiguration

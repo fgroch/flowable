@@ -48,6 +48,7 @@ Brief summary/description of the plugin.
     Closure doWithSpring() {
         {->
             final Config conf = grailsApplication.config
+            //System.out.println(conf)
             dataSource(org.springframework.jdbc.datasource.DriverManagerDataSource) {
                 return DataSourceBuilder.create()
                     .url(conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.url"))

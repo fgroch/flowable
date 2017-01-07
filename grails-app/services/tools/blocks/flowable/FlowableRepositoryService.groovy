@@ -1,14 +1,19 @@
-package tools.blocks
+package tools.blocks.flowable
 
 import grails.transaction.Transactional
 import org.flowable.bpmn.model.BpmnModel
+import org.flowable.dmn.api.DecisionTable
 import org.flowable.engine.RepositoryService
 import org.flowable.engine.app.AppModel
 import org.flowable.engine.common.api.FlowableException
 import org.flowable.engine.common.api.FlowableObjectNotFoundException
 import org.flowable.engine.repository.Deployment
 import org.flowable.engine.repository.DiagramLayout
+import org.flowable.engine.repository.Model
 import org.flowable.engine.repository.ProcessDefinition
+import org.flowable.engine.task.IdentityLink
+import org.flowable.form.api.FormDefinition
+import org.flowable.validation.ValidationError
 
 import java.util.zip.ZipInputStream
 
@@ -171,5 +176,73 @@ class FlowableRepositoryService {
 
     AppModel getAppResourceModel(String deploymentId) {
         repositoryService.getAppResourceModel(deploymentId)
+    }
+
+    Model getModel(String modelId) {
+        repositoryService.getModel(modelId)
+    }
+
+    byte[] getModelEditorSource(String modelId) {
+        repositoryService.getModelEditorSource(modelId)
+    }
+
+    byte[] getModelEditorSourceExtra(String modelId) {
+        repositoryService.getModelEditorSourceExtra(modelId)
+    }
+
+    boolean addCandidateStarterUser(String processDefinitionId, String userId) {
+        try {
+            repositoryService.addCandidateStarterUser(processDefinitionId, userId)
+        } catch (FlowableObjectNotFoundException e) {
+            log.debug(e)
+            return false
+        }
+        return true
+    }
+
+    boolean addCandidateStarterGroup(String processDefinitionId, String groupId) {
+        try {
+            repositoryService.addCandidateStarterGroup(processDefinitionId, groupId)
+        } catch (FlowableObjectNotFoundException e) {
+            log.debug(e)
+            return false
+        }
+        return true
+    }
+
+    boolean deleteCandidateStarterUser(String processDefinitionId, String userId) {
+        try {
+            repositoryService.deleteCandidateStarterUser(processDefinitionId, userId)
+        } catch (FlowableObjectNotFoundException e) {
+            log.debug(e)
+            return false
+        }
+        return true
+    }
+
+    boolean deleteCandidateStarterGroup(String processDefinitionId, String groupId) {
+        try {
+            repositoryService.deleteCandidateStarterGroup(processDefinitionId, groupId)
+        } catch (FlowableObjectNotFoundException e) {
+            log.debug(e)
+            return false
+        }
+        return true
+    }
+
+    List<IdentityLink> getIdentityLinksForProcessDefinition(String processDefinitionId) {
+        repositoryService.getIdentityLinksForProcessDefinition(processDefinitionId)
+    }
+
+    List<ValidationError> validateProcess(BpmnModel bpmnModel) {
+        repositoryService.validateProcess(bpmnModel)
+    }
+
+    List<DecisionTable> getDecisionTablesForProcessDefinition(String processDefinitionId) {
+        repositoryService.getDecisionTablesForProcessDefinition(processDefinitionId)
+    }
+
+    List<FormDefinition> getFormDefinitionsForProcessDefinition(String processDefinitionId) {
+        repositoryService.getFormDefinitionsForProcessDefinition(processDefinitionId)
     }
 }

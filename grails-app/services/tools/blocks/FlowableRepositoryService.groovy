@@ -33,4 +33,12 @@ class FlowableRepositoryService {
         Deployment deployment = repositoryService.createDeployment().name(name).addZipInputStream(inputStream).deploy()
         deployment
     }
+
+    def delete(String deploymentId) {
+        repositoryService.deleteDeployment(deploymentId)
+    }
+
+    def delete(String deploymentId, boolean cascade) {
+        repositoryService.deleteDeployment(deploymentId, cascade)
+    }
 }

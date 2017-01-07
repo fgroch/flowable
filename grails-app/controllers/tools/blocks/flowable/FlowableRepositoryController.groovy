@@ -1,5 +1,6 @@
 package tools.blocks.flowable
 
+import grails.transaction.Transactional
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest
 
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -18,6 +19,7 @@ class FlowableRepositoryController {
         flowableRepositoryService.getDeployments(params.offset, params.max)
     }
 
+    @Transactional
     def deploy() {
         if (!params.file || !(params.file instanceof StandardMultipartHttpServletRequest.StandardMultipartFile)) {
             notFound()
@@ -25,6 +27,19 @@ class FlowableRepositoryController {
         }
         def deployment = flowableRepositoryService.deploy(params.file, params.name ?: '')
         respond(deployment: deployment)
+    }
+
+    @Transactional
+    def delete() {
+        if (!params.deploymentId) {
+            notFound()
+            return
+        }
+        if (params.cascade) {
+            flowableRepositoryService.delete(params.deploymentId, params.cascade)
+        } else {
+            flowableRepositoryService.delete(params.deploymentId)
+        }
     }
 
     protected void notFound() {

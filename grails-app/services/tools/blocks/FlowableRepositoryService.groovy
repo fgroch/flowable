@@ -1,10 +1,14 @@
 package tools.blocks
 
 import grails.transaction.Transactional
+import org.flowable.bpmn.model.BpmnModel
 import org.flowable.engine.RepositoryService
+import org.flowable.engine.app.AppModel
 import org.flowable.engine.common.api.FlowableException
 import org.flowable.engine.common.api.FlowableObjectNotFoundException
 import org.flowable.engine.repository.Deployment
+import org.flowable.engine.repository.DiagramLayout
+import org.flowable.engine.repository.ProcessDefinition
 
 import java.util.zip.ZipInputStream
 
@@ -93,5 +97,79 @@ class FlowableRepositoryService {
         }
         return true
 
+    }
+
+    boolean activateProcessDefinitionById(String processDefinitionId) {
+        activateProcessDefinitionById(processDefinitionId, false, null)
+    }
+
+    boolean activateProcessDefinitionById(String processDefinitionId, boolean activateProcessInstances, Date activationDate) {
+        try {
+            repositoryService.activateProcessDefinitionById(processDefinitionId, activateProcessInstances, activationDate)
+        } catch(FlowableObjectNotFoundException | FlowableException e) {
+            log.debug(e)
+            return false
+        }
+        return true
+    }
+
+    boolean activateProcessDefinitionByKey(String processDefinitionKey) {
+        activateProcessDefinitionByKey(processDefinitionKey, false, null)
+    }
+
+    boolean activateProcessDefinitionByKey(String processDefinitionKey, boolean activateProcessInstances, Date activationDate) {
+        try {
+            repositoryService.activateProcessDefinitionByKey(processDefinitionKey, activateProcessInstances, activationDate)
+        } catch(FlowableObjectNotFoundException | FlowableException e) {
+            log.debug(e)
+            return false
+        }
+        return true
+    }
+
+    boolean activateProcessDefinitionByKey(String processDefinitionKey, String tenantId) {
+        activateProcessDefinitionByKey(processDefinitionKey, false, null, tenantId)
+    }
+
+    boolean activateProcessDefinitionByKey(String processDefinitionKey, boolean activateProcessInstances, Date activationDate, String tenantId) {
+        try {
+            repositoryService.activateProcessDefinitionByKey(processDefinitionKey, activateProcessInstances, activationDate, tenantId)
+        } catch(FlowableObjectNotFoundException | FlowableException e) {
+            log.debug(e)
+            return false
+        }
+        return true
+    }
+
+    InputStream getProcessModel(String processDefinitionId) {
+        repositoryService.getProcessModel(processDefinitionId)
+    }
+
+    InputStream getProcessDiagram(String processDefinitionId) {
+        repositoryService.getProcessDiagram(processDefinitionId)
+    }
+
+    ProcessDefinition getProcessDefinition(String processDefinitionId) {
+        repositoryService.getProcessDefinition(processDefinitionId)
+    }
+
+    boolean isProcessDefinitionSuspended(String processDefinitionId) {
+        repositoryService.isProcessDefinitionSuspended(processDefinitionId)
+    }
+
+    BpmnModel getBpmnModel(String processDefinitionId) {
+        repositoryService.getBpmnModel(processDefinitionId)
+    }
+
+    DiagramLayout getProcessDiagramLayout(String processDefinitionId) {
+        repositoryService.getProcessDiagramLayout(processDefinitionId)
+    }
+
+    Object getAppResourceObject(String deploymentId) {
+        repositoryService.getAppResourceObject(deploymentId)
+    }
+
+    AppModel getAppResourceModel(String deploymentId) {
+        repositoryService.getAppResourceModel(deploymentId)
     }
 }

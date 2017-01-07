@@ -35,8 +35,8 @@ class FlowableRepositoryController {
             notFound()
             return
         }
-        if (params.cascade) {
-            flowableRepositoryService.delete(params.deploymentId, params.cascade)
+        if (params.force) {
+            flowableRepositoryService.forceDelete(params.deploymentId)
         } else {
             flowableRepositoryService.delete(params.deploymentId)
         }

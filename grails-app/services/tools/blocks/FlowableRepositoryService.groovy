@@ -38,7 +38,7 @@ class FlowableRepositoryService {
         repositoryService.deleteDeployment(deploymentId)
     }
 
-    def delete(String deploymentId, boolean cascade) {
-        repositoryService.deleteDeployment(deploymentId, cascade)
+    def forceDelete(String deploymentId) {
+        repositoryService.deleteDeployment(deploymentId, true)
     }
 }

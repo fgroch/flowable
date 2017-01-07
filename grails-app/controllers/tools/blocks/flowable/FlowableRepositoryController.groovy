@@ -25,7 +25,10 @@ class FlowableRepositoryController {
             notFound()
             return
         }
-        def deployment = flowableRepositoryService.deploy(params.file, params.name ?: '')
+        def key = params.key ?: null
+        def category = params.category ?: null
+        String name = params.name ?: ''
+        def deployment = flowableRepositoryService.deploy(params.file, name, category, key)
         respond(deployment: deployment)
     }
 

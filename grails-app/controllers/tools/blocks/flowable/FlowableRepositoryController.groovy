@@ -68,19 +68,19 @@ class FlowableRepositoryController {
 
     @Transactional
     def suspendProcessDefinition() {
-        def key = params.key
-        def id = params.id
+        def deploymentKey = params.deploymentKey
+        def deploymentId = params.deploymentId
         def suspendProcessInstances = params.suspendProcessInstances ?: false
         def suspensionDate = params.suspensionDate
         def executed = false
         def ret = false
-        if (id) {
-            ret = flowableRepositoryService.suspendProcessDefinitionById(id, suspendProcessInstances, suspensionDate)
+        if (deploymentId) {
+            ret = flowableRepositoryService.suspendProcessDefinitionById(deploymentId, suspendProcessInstances, suspensionDate)
             executed = true
         }
 
-        if (key && !executed) {
-            ret = flowableRepositoryService.suspendProcessDefinitionByKey(key, suspendProcessInstances, suspensionDate)
+        if (deploymentKey && !executed) {
+            ret = flowableRepositoryService.suspendProcessDefinitionByKey(deploymentKey, suspendProcessInstances, suspensionDate)
             executed = true
         }
 
@@ -109,21 +109,21 @@ class FlowableRepositoryController {
 
     @Transactional
     def activateProcessDefinition() {
-        def key = params.key
-        def id = params.id
+        def deploymentKey = params.deploymentKey
+        def deploymentId = params.deploymentId
         def activateProcessInstances = params.activateProcessInstances ?: false
         def activationDate = params.activationDate
         def tenantId = params.tenantId
         def executed = false
         def ret = false
 
-        if (id) {
-            ret = flowableRepositoryService.activateProcessDefinitionById(id, activateProcessInstances, activationDate)
+        if (deploymentId) {
+            ret = flowableRepositoryService.activateProcessDefinitionById(deploymentId, activateProcessInstances, activationDate)
             executed = true
         }
 
-        if (key && !executed) {
-            ret = flowableRepositoryService.activateProcessDefinitionByKey(id, activateProcessInstances, activationDate, tenantId)
+        if (deploymentKey && !executed) {
+            ret = flowableRepositoryService.activateProcessDefinitionByKey(deploymentKey, activateProcessInstances, activationDate, tenantId)
             executed = true
         }
 
@@ -148,6 +148,15 @@ class FlowableRepositoryController {
         } else {
             notFound()
         }
+    }
+
+    def isProcessDefinitionSuspended() {
+        if (!params.deploymentId) {
+            notFound()
+            return
+        }
+        def ret = flowableRepositoryService.isProcessDefinitionSuspended(deploymentId)
+        respond executed, [status: OK]
     }
 
     protected void notFound() {

@@ -107,6 +107,49 @@ class FlowableRepositoryController {
         }
     }
 
+    @Transactional
+    def activateProcessDefinition() {
+        def key = params.key
+        def id = params.id
+        def activateProcessInstances = params.activateProcessInstances ?: false
+        def activationDate = params.activationDate
+        def tenantId = params.tenantId
+        def executed = false
+        def ret = false
+
+        if (id) {
+            ret = flowableRepositoryService.activateProcessDefinitionById(id, activateProcessInstances, activationDate)
+            executed = true
+        }
+
+        if (key && !executed) {
+            ret = flowableRepositoryService.activateProcessDefinitionByKey(id, activateProcessInstances, activationDate, tenantId)
+            executed = true
+        }
+
+        if (executed) {
+            if (ret) {
+                request.withFormat {
+                    form multipartForm {
+                        flash.message = message(code: 'flowable.deployment.activated', default: 'Deployment activated')
+                        respond ret, [status: OK]
+                    }
+                    '*' { respond executed, [status: OK] }
+                }
+            } else {
+                request.withFormat {
+                    form multipartForm {
+                        flash.message = message(code: 'flowable.deployment.not.activated', default: 'Deployment not activated')
+                        respond ret, [status: NOT_MODIFIED]
+                    }
+                    '*' { respond executed, [status: NOT_MODIFIED] }
+                }
+            }
+        } else {
+            notFound()
+        }
+    }
+
     protected void notFound() {
         request.withFormat {
             form multipartForm {

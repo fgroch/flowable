@@ -3,6 +3,7 @@ package tools.blocks.flowable
 import grails.transaction.Transactional
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest
 
+import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NOT_MODIFIED
 import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
@@ -157,6 +158,28 @@ class FlowableRepositoryController {
         }
         def ret = flowableRepositoryService.isProcessDefinitionSuspended(deploymentId)
         respond executed, [status: OK]
+    }
+
+    def getProcessDiagram() {
+
+        if (!params.deploymentId) {
+            notFound()
+            return
+        }
+        def inputStream = flowableRepositoryService.getProcessDiagram(params.deploymentId)
+        if (inputStream) {
+
+            ['Content-disposition': "${params.containsKey('inline') ? 'inline' : 'attachment'};filename=\"$params.deploymentId + '.png'\"",
+             'Cache-Control': 'private',
+             'Pragma': ''].each {k, v ->
+                response.setHeader(k, v)
+            }
+            response.contentType = 'image/png'
+            //response.contentType = 'application/octet-stream'
+            response.outputStream << inputStream
+            return
+        }
+        response.status = NOT_FOUND
     }
 
     protected void notFound() {

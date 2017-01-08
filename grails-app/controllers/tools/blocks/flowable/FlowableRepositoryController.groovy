@@ -3,7 +3,9 @@ package tools.blocks.flowable
 import grails.transaction.Transactional
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest
 
+import static org.springframework.http.HttpStatus.NOT_MODIFIED
 import static org.springframework.http.HttpStatus.NO_CONTENT
+import static org.springframework.http.HttpStatus.OK
 
 class FlowableRepositoryController {
 
@@ -38,20 +40,80 @@ class FlowableRepositoryController {
             notFound()
             return
         }
+        def ret = false
         if (params.force) {
-            flowableRepositoryService.forceDelete(params.deploymentId)
+            ret = flowableRepositoryService.forceDelete(params.deploymentId)
         } else {
-            flowableRepositoryService.delete(params.deploymentId)
+            ret = flowableRepositoryService.delete(params.deploymentId)
+        }
+        if (ret) {
+            request.withFormat {
+                form multipartForm {
+                    flash.message = message(code: 'flowable.deployment.deleted', default: 'Deployment deleted')
+                    respond ret, [status: OK]
+                }
+                '*'{ render status: OK, text: message(code: 'flowable.deployment.deleted', default: 'Deployment deleted') }
+            }
+        } else {
+            request.withFormat {
+                form multipartForm {
+                    flash.message = message(code: 'flowable.deployment.not.deleted', default: 'Deployment not deleted')
+                    respond ret, [status: NOT_MODIFIED]
+                }
+                '*'{ render status: NOT_MODIFIED, text: message(code: 'flowable.deployment.not.deleted', default: 'Deployment not deleted') }
+            }
+        }
+
+    }
+
+    @Transactional
+    def suspendProcessDefinition() {
+        def key = params.key
+        def id = params.id
+        def suspendProcessInstances = params.suspendProcessInstances ?: false
+        def suspensionDate = params.suspensionDate
+        def executed = false
+        def ret = false
+        if (id) {
+            ret = flowableRepositoryService.suspendProcessDefinitionById(id, suspendProcessInstances, suspensionDate)
+            executed = true
+        }
+
+        if (key && !executed) {
+            ret = flowableRepositoryService.suspendProcessDefinitionByKey(key, suspendProcessInstances, suspensionDate)
+            executed = true
+        }
+
+        if (executed) {
+            if (ret) {
+                request.withFormat {
+                    form multipartForm {
+                        flash.message = message(code: 'flowable.deployment.suspended', default: 'Deployment suspended')
+                        respond ret, [status: OK]
+                    }
+                    '*' { respond executed, [status: OK] }
+                }
+            } else {
+                request.withFormat {
+                    form multipartForm {
+                        flash.message = message(code: 'flowable.deployment.not.suspended', default: 'Deployment not suspended')
+                        respond ret, [status: NOT_MODIFIED]
+                    }
+                    '*' { respond executed, [status: NOT_MODIFIED] }
+                }
+            }
+        } else {
+            notFound()
         }
     }
 
     protected void notFound() {
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'flowable.empty.upload.deployment', default: 'No file attached as deployment')
-                redirect action: "index", method: "GET"
+                flash.message = message(code: 'flowable.empty.deployment', default: 'No deployment set')
+                respond false, [status: NO_CONTENT]
             }
-            '*'{ render status: NO_CONTENT, text: message(code: 'flowable.empty.upload.deployment', default: 'No file attached as deployment') }
+            '*'{ render status: NO_CONTENT, text: message(code: 'flowable.empty.deployment', default: 'No deployment set') }
         }
     }
 }

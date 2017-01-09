@@ -4,10 +4,9 @@ import grails.transaction.Transactional
 import org.flowable.engine.common.api.FlowableObjectNotFoundException
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest
 
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NOT_MODIFIED
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
+import static org.springframework.http.HttpStatus.*
+
+import static org.grails.web.servlet.mvc.OutputAwareHttpServletResponse.*
 
 class FlowableRepositoryController {
 
@@ -52,17 +51,17 @@ class FlowableRepositoryController {
             request.withFormat {
                 form multipartForm {
                     flash.message = message(code: 'flowable.deployment.deleted', default: 'Deployment deleted')
-                    respond ret, [status: OK]
+                    respond ret, [status: SC_OK]
                 }
-                '*'{ render status: OK, text: message(code: 'flowable.deployment.deleted', default: 'Deployment deleted') }
+                '*'{ render status: SC_OK, text: message(code: 'flowable.deployment.deleted', default: 'Deployment deleted') }
             }
         } else {
             request.withFormat {
                 form multipartForm {
                     flash.message = message(code: 'flowable.deployment.not.deleted', default: 'Deployment not deleted')
-                    respond ret, [status: NOT_MODIFIED]
+                    respond ret, [status: SC_NOT_MODIFIED]
                 }
-                '*'{ render status: NOT_MODIFIED, text: message(code: 'flowable.deployment.not.deleted', default: 'Deployment not deleted') }
+                '*'{ render status: SC_NOT_MODIFIED, text: message(code: 'flowable.deployment.not.deleted', default: 'Deployment not deleted') }
             }
         }
 
@@ -91,17 +90,17 @@ class FlowableRepositoryController {
                 request.withFormat {
                     form multipartForm {
                         flash.message = message(code: 'flowable.deployment.suspended', default: 'Deployment suspended')
-                        respond ret, [status: OK]
+                        respond ret, [status: SC_OK]
                     }
-                    '*' { respond executed, [status: OK] }
+                    '*' { respond executed, [status: SC_OK] }
                 }
             } else {
                 request.withFormat {
                     form multipartForm {
                         flash.message = message(code: 'flowable.deployment.not.suspended', default: 'Deployment not suspended')
-                        respond ret, [status: NOT_MODIFIED]
+                        respond ret, [status: SC_NOT_MODIFIED]
                     }
-                    '*' { respond executed, [status: NOT_MODIFIED] }
+                    '*' { respond executed, [status: SC_NOT_MODIFIED] }
                 }
             }
         } else {
@@ -134,17 +133,17 @@ class FlowableRepositoryController {
                 request.withFormat {
                     form multipartForm {
                         flash.message = message(code: 'flowable.deployment.activated', default: 'Deployment activated')
-                        respond ret, [status: OK]
+                        respond ret, [status: SC_OK]
                     }
-                    '*' { respond executed, [status: OK] }
+                    '*' { respond executed, [status: SC_OK] }
                 }
             } else {
                 request.withFormat {
                     form multipartForm {
                         flash.message = message(code: 'flowable.deployment.not.activated', default: 'Deployment not activated')
-                        respond ret, [status: NOT_MODIFIED]
+                        respond ret, [status: SC_NOT_MODIFIED]
                     }
-                    '*' { respond executed, [status: NOT_MODIFIED] }
+                    '*' { respond executed, [status: SC_NOT_MODIFIED] }
                 }
             }
         } else {
@@ -157,8 +156,8 @@ class FlowableRepositoryController {
             notFound()
             return
         }
-        def ret = flowableRepositoryService.isProcessDefinitionSuspended(deploymentId)
-        respond executed, [status: OK]
+        def ret = flowableRepositoryService.isProcessDefinitionSuspended(params.deploymentId)
+        respond ret, [status: SC_OK]
     }
 
     def getProcessDiagram() {
@@ -185,16 +184,17 @@ class FlowableRepositoryController {
         } catch (FlowableObjectNotFoundException e) {
             log.debug("Diagram not found for download", e)
         }
-        response.status = NOT_FOUND
+        respond([:], status: NOT_FOUND)
+        //response.status = SC_NOT_FOUND
     }
 
     protected void notFound() {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'flowable.empty.deployment', default: 'No deployment set')
-                respond false, [status: NO_CONTENT]
+                respond false, [status: SC_NO_CONTENT]
             }
-            '*'{ render status: NO_CONTENT, text: message(code: 'flowable.empty.deployment', default: 'No deployment set') }
+            '*'{ render status: SC_NO_CONTENT, text: message(code: 'flowable.empty.deployment', default: 'No deployment set') }
         }
     }
 }

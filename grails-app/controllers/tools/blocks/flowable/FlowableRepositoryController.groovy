@@ -1,6 +1,7 @@
 package tools.blocks.flowable
 
 import grails.transaction.Transactional
+import org.flowable.engine.common.api.FlowableObjectNotFoundException
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest
 
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -166,18 +167,23 @@ class FlowableRepositoryController {
             notFound()
             return
         }
-        def inputStream = flowableRepositoryService.getProcessDiagram(params.deploymentId)
-        if (inputStream) {
+        def inputStream
+        try {
+            inputStream = flowableRepositoryService.getProcessDiagram(params.deploymentId)
+            if (inputStream) {
 
-            ['Content-disposition': "${params.containsKey('inline') ? 'inline' : 'attachment'};filename=\"$params.deploymentId + '.png'\"",
-             'Cache-Control': 'private',
-             'Pragma': ''].each {k, v ->
-                response.setHeader(k, v)
+                ['Content-disposition': "${params.containsKey('inline') ? 'inline' : 'attachment'};filename=\"$params.deploymentId + '.png'\"",
+                 'Cache-Control'      : 'private',
+                 'Pragma'             : ''].each { k, v ->
+                    response.setHeader(k, v)
+                }
+                response.contentType = 'image/png'
+                //response.contentType = 'application/octet-stream'
+                response.outputStream << inputStream
+                return
             }
-            response.contentType = 'image/png'
-            //response.contentType = 'application/octet-stream'
-            response.outputStream << inputStream
-            return
+        } catch (FlowableObjectNotFoundException e) {
+            log.debug("Diagram not found for download", e)
         }
         response.status = NOT_FOUND
     }

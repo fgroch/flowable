@@ -25,7 +25,7 @@ class FlowableRepositoryController {
     @Transactional
     def deploy() {
         if (!params.file || !(params.file instanceof StandardMultipartHttpServletRequest.StandardMultipartFile)) {
-            notFound()
+            emptyDeployment()
             return
         }
         def key = params.key ?: null
@@ -38,7 +38,7 @@ class FlowableRepositoryController {
     @Transactional
     def delete() {
         if (!params.deploymentId) {
-            notFound()
+            emptyDeployment()
             return
         }
         def ret = false
@@ -153,7 +153,7 @@ class FlowableRepositoryController {
 
     def isProcessDefinitionSuspended() {
         if (!params.deploymentId) {
-            notFound()
+            emptyDeployment()
             return
         }
         def ret = flowableRepositoryService.isProcessDefinitionSuspended(params.deploymentId)
@@ -163,7 +163,7 @@ class FlowableRepositoryController {
     def getProcessDiagram() {
 
         if (!params.deploymentId) {
-            notFound()
+            emptyDeployment()
             return
         }
         def inputStream
@@ -184,17 +184,28 @@ class FlowableRepositoryController {
         } catch (FlowableObjectNotFoundException e) {
             log.debug("Diagram not found for download", e)
         }
-        respond([:], status: NOT_FOUND)
+        //respond([:], status: NOT_FOUND)
         //response.status = SC_NOT_FOUND
+        notFound()
     }
 
     protected void notFound() {
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'flowable.empty.deployment', default: 'No deployment set')
-                respond false, [status: SC_NO_CONTENT]
+                flash.message = message(code: 'flowable.deployment.not.found', default: 'Deployment not found')
+                respond false, [status: NO_CONTENT]
             }
-            '*'{ render status: SC_NO_CONTENT, text: message(code: 'flowable.empty.deployment', default: 'No deployment set') }
+            '*'{ render status: NO_CONTENT, text: message(code: 'flowable.deployment.not.found', default: 'Deployment not found') }
+        }
+    }
+
+    protected void emptyDeployment() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'flowable.empty.deployment', default: 'No deployment set')
+                respond false, [status: NO_CONTENT]
+            }
+            '*'{ render status: NO_CONTENT, text: message(code: 'flowable.empty.deployment', default: 'No deployment set') }
         }
     }
 }

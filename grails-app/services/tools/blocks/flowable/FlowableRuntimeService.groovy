@@ -95,5 +95,11 @@ class FlowableRuntimeService {
         runtimeService.deleteProcessInstance(processInstanceId, deleteReason)
     }
 
+    void updateBusinessKey(String processInstanceId, String businessKey) {
+        runtimeService.updateBusinessKey(processInstanceId, businessKey)
+    }
 
+    Map<String, Object> getVariables(String executionId) {
+        runtimeService.getVariable(executionId)
+    }
 }

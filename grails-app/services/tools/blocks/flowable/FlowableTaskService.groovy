@@ -6,14 +6,30 @@ import org.flowable.engine.TaskService
 import org.flowable.engine.common.api.FlowableException
 import org.flowable.engine.common.api.FlowableObjectNotFoundException
 import org.flowable.engine.impl.persistence.entity.VariableInstance
+import org.flowable.engine.runtime.DataObject
+import org.flowable.engine.task.Attachment
+import org.flowable.engine.task.Comment
+import org.flowable.engine.task.Event
 import org.flowable.engine.task.IdentityLink
+import org.flowable.engine.task.NativeTaskQuery
 import org.flowable.engine.task.Task
+import org.flowable.engine.task.TaskQuery
 import org.flowable.form.model.FormModel
 
 @Transactional
 class FlowableTaskService {
 
     TaskService taskService
+
+    //Querying
+    TaskQuery createTaskQuery() {
+        taskService.createTaskQuery()
+    }
+
+    NativeTaskQuery createNativeTaskQuery() {
+        taskService.createNativeTaskQuery()
+    }
+    //Other methods
 
     Task newTask() {
         taskService.newTask()
@@ -381,5 +397,136 @@ class FlowableTaskService {
         taskService.getVariableInstancesLocal(taskId, variableNames)
     }
 
+    def removeVariable(String taskId, String variableName) {
+        taskService.removeVariable(taskId, variableName)
+    }
 
+    def removeVariableLocal(String taskId, String variableName) {
+        taskService.removeVariableLocal(taskId, variableName)
+    }
+
+    def removeVariables(String taskId, Collection<String> variableNames) {
+        taskService.removeVariables(taskId, variableNames)
+    }
+
+    def removeVariablesLocal(String taskId, Collection<String> variableNames) {
+        taskService.removeVariablesLocal(taskId, variableNames)
+    }
+
+    //Map<String, DataObject>
+    def getDataObjects(String taskId) {
+        taskService.getDataObjects(taskId)
+    }
+
+    //Map<String, DataObject>
+    def getDataObjects(String taskId, String locale, boolean withLocalizationFallback) {
+        taskService.getDataObjects(taskId, locale, withLocalizationFallback)
+    }
+
+    //Map<String, DataObject>
+    def getDataObjects(String taskId, Collection<String> dataObjectNames) {
+        taskService.getDataObjects(taskId, dataObjectNames)
+    }
+
+    //Map<String, DataObject>
+    def getDataObjects(String taskId, Collection<String> dataObjectNames, String locale, boolean withLocalizationFallback) {
+        taskService.getDataObjects(taskId, dataObjectNames, locale, withLocalizationFallback)
+    }
+
+    DataObject getDataObject(String taskId, String dataObject) {
+        taskService.getDataObject(taskId, dataObject)
+    }
+
+    DataObject getDataObject(String taskId, String dataObjectName, String locale, boolean withLocalizationFallback) {
+        taskService.getDataObject(taskId, dataObjectName, locale, withLocalizationFallback)
+    }
+
+    Comment addComment(String taskId, String processInstanceId, String message) {
+        taskService.addComment(taskId, processInstanceId, message)
+    }
+
+    Comment addComment(String taskId, String processInstanceId, String type, String message) {
+        taskService.addComment(taskId, processInstanceId, type, message)
+    }
+
+    Comment getComment(String commentId) {
+        taskService.getComment(commentId)
+    }
+
+    def deleteComments(String taskId, String processInstanceId) {
+        taskService.deleteComments(taskId, processInstanceId)
+    }
+
+    boolean deleteComment(String commentId) {
+        try {
+            taskService.deleteComment(commentId)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    List<Comment> getTaskComments(String taskId) {
+        taskService.getTaskComments(taskId)
+    }
+
+    List<Comment> getTaskComments(String taskId, String type) {
+        taskService.getTaskComments(taskId, type)
+    }
+
+    List<Comment> getCommentsByType(String type) {
+        taskService.getCommentsByType(type)
+    }
+
+    List<Event> getTaskEvents(String taskId) {
+        taskService.getTaskEvents(taskId)
+    }
+
+    Event getEvent(String eventId) {
+        taskService.getEvent(eventId)
+    }
+
+    List<Comment> getProcessInstanceComments(String processInstanceId) {
+        taskService.getProcessInstanceComments(processInstanceId)
+    }
+
+    List<Comment> getProcessInstanceComments(String processInstanceId, String type) {
+        taskService.getProcessInstanceComments(processInstanceId, type)
+    }
+
+    Attachment createAttachment(String attachmentType, String taskId, String processInstanceId, String attachmentName, String attachmentDescription, InputStream content) {
+        taskService.createAttachment(attachmentType, taskId, processInstanceId, attachmentName, attachmentDescription, content)
+    }
+
+    Attachment createAttachment(String attachmentType, String taskId, String processInstanceId, String attachmentName, String attachmentDescription, String url) {
+        taskService.createAttachment(attachmentType, taskId, processInstanceId, attachmentName, attachmentDescription, url)
+    }
+
+    def saveAttachment(Attachment attachment) {
+        taskService.saveAttachment(attachment)
+    }
+
+    Attachment getAttachment(String attachmentId) {
+        taskService.getAttachment(attachmentId)
+    }
+
+    InputStream getAttachmentContent(String attachmentId) {
+        taskService.getAttachmentContent(attachmentId)
+    }
+
+    List<Attachment> getTaskAttachments(String taskId) {
+        taskService.getTaskAttachments(taskId)
+    }
+
+    List<Attachment> getProcessInstanceAttachments(String processInstanceId) {
+        taskService.getProcessInstanceAttachments(processInstanceId)
+    }
+
+    def deleteAttachment(String attachmentId) {
+        taskService.deleteAttachment(attachmentId)
+    }
+
+    List<Task> getSubTasks(String parentTaskId) {
+        taskService.getSubTasks(parentTaskId)
+    }
 }

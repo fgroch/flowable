@@ -5,6 +5,7 @@ import org.flowable.engine.FlowableTaskAlreadyClaimedException
 import org.flowable.engine.TaskService
 import org.flowable.engine.common.api.FlowableException
 import org.flowable.engine.common.api.FlowableObjectNotFoundException
+import org.flowable.engine.impl.persistence.entity.VariableInstance
 import org.flowable.engine.task.IdentityLink
 import org.flowable.engine.task.Task
 import org.flowable.form.model.FormModel
@@ -239,6 +240,145 @@ class FlowableTaskService {
             return false
         }
         return true
+    }
+
+    boolean deleteCandidateUser(String taskId, String userId) {
+        try {
+            taskService.deleteCandidateUser(taskId, userId)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean deleteCandidateGroup(String taskId, String groupId) {
+        try{
+            taskService.deleteCandidateGroup(taskId, groupId)
+        } catch(FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean deleteUserIdentityLink(String taskId, String userId, String identityLinkType) {
+        try {
+            taskService.deleteUserIdentityLink(taskId, userId, identityLinkType)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean deleteGroupIdentityLink(String taskId, String groupId, String identityLinkType) {
+        try {
+            taskService.deleteGroupIdentityLink(taskId, groupId, identityLinkType)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean setPriority(String taskId, int priority) {
+        try {
+            taskService.setPriority(taskId, priority)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean setDueDate(String taskId, Date dueDate) {
+        try {
+            taskService.setDueDate(taskId, dueDate)
+        } catch (FlowableException e) {
+            return false
+        }
+        return true
+    }
+
+    def setVariable(String taskId, String variableName, Object value) {
+        taskService.setVariable(taskId, variableName, value)
+    }
+
+    def setVariables(String taskId, Map<String, ? extends Object> variables) {
+        taskService.setVariables(taskId, variables)
+    }
+
+    def setVariableLocal(String taskId, String variableName, Object value) {
+        taskService.setVariableLocal(taskId, variableName, value)
+    }
+
+    def setVariablesLocal(String taskId, Map<String, ? extends Object> variables) {
+        taskService.setVariablesLocal(taskId, variables)
+    }
+
+    def getVariable(String taskId, String variableName) {
+        taskService.getVariable(taskId, variableName)
+    }
+
+    VariableInstance getVariableInstance(String taskId, String variableName) {
+        taskService.getVariableInstance(taskId, variableName)\
+    }
+
+    boolean hasVariable(String taskId, String variableName) {
+        taskService.hasVariable(taskId, variableName)
+    }
+
+    def getVariableLocal(String taskId, String variableName) {
+        taskService.getVariableLocal(taskId, variableName)
+    }
+
+    VariableInstance getVariableInstanceLocal(String taskId, String variableName) {
+        taskService.getVariableInstanceLocal(taskId, variableName)
+    }
+
+    boolean hasVariableLocal(String taskId, String variableName) {
+        taskService.hasVariableLocal(taskId, variableName)
+    }
+
+    //returns Map<String, Object>
+    def getVariables(String taskId) {
+        taskService.getVariables(taskId)
+    }
+
+    //returns Map<String, VariableInstance>
+    def getVariableInstances(String taskId) {
+        taskService.getVariableInstances(taskId)
+    }
+
+    //Map<String, VariableInstance>
+    def getVariableInstances(String taskId, Collection<String> variableNames) {
+        taskService.getVariableInstances(taskId, variableNames)
+    }
+
+    //Map<String, Object>
+    def getVariablesLocal(String taskId) {
+        taskService.getVariablesLocal(taskId)
+    }
+
+    //Map<String, Object>
+    def getVariables(String taskId, Collection<String> variableNames) {
+        taskService.getVariables(taskId, variableNames)
+    }
+
+    //Map<String, Object>
+    def getVariablesLocal(String taskId, Collection<String> variableNames) {
+        taskService.getVariablesLocal(taskId, variableNames)
+    }
+
+    //List<VariableInstance>
+    def getVariableInstancesLocalByTaskIds(Set<String> taskIds) {
+        taskService.getVariableInstancesLocalByTaskIds(taskIds)
+    }
+
+    //Map<String, VariableInstance>
+    def getVariableInstancesLocal(String taskId) {
+        taskService.getVariableInstancesLocal(taskId)
+    }
+
+    //Map<String, VariableInstance>
+    def getVariableInstancesLocal(String taskId, Collection<String> variableNames) {
+        taskService.getVariableInstancesLocal(taskId, variableNames)
     }
 
 

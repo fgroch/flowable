@@ -5,7 +5,9 @@ import org.flowable.engine.FlowableTaskAlreadyClaimedException
 import org.flowable.engine.TaskService
 import org.flowable.engine.common.api.FlowableException
 import org.flowable.engine.common.api.FlowableObjectNotFoundException
+import org.flowable.engine.task.IdentityLink
 import org.flowable.engine.task.Task
+import org.flowable.form.model.FormModel
 
 @Transactional
 class FlowableTaskService {
@@ -176,4 +178,68 @@ class FlowableTaskService {
                              Map<String, Object> variables, boolean localScope) {
         taskService.completeTaskWithForm(taskId, formDefinitionId, outcome, variables, localScope)
     }
+
+    FormModel getTaskFormModel(String taskId) {
+        taskService.getTaskFormModel(taskId)
+    }
+
+    boolean setAssignee(String taskId, String userId) {
+        try {
+            taskService.setAssignee(taskId, userId)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean setOwner(String taskId, String userId) {
+        try {
+            taskService.setOwner(taskId, userId)
+        } catch(FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    List<IdentityLink> getIdentityLinksForTask(String taskId) {
+        taskService.getIdentityLinksForTask(taskId)
+    }
+
+    boolean addCandidateUser(String taskId, String userId) {
+        try {
+            taskService.addCandidateUser(taskId, userId)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean addCandidateGroup(String taskId, String groupId) {
+        try {
+            taskService.addCandidateGroup(taskId, groupId)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean addUserIdentityLink(String taskId, String userId, String identityLinkType) {
+        try {
+            taskService.addUserIdentityLink(taskId, userId, identityLinkType)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean addGroupIdentityLink(String taskId, String groupId, String identityLinkType) {
+        try {
+            taskService.addGroupIdentityLink(taskId, groupId, identityLinkType)
+        } catch (FlowableObjectNotFoundException e) {
+            return false
+        }
+        return true
+    }
+
+
 }

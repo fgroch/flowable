@@ -80,6 +80,9 @@ Brief summary/description of the plugin.
             taskService(processEngine: "getTaskService")
             historyService(processEngine: "getHistoryService")
             managementService(processEngine: "getManagementService")
+            identityService(processEngine: "getIdentityService")
+            runtimeService(processEngine: "getRuntimeService")
+
         }
     }
 

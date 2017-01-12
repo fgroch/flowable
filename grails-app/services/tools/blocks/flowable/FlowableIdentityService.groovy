@@ -17,7 +17,7 @@ class FlowableIdentityService {
     IdentityService identityService
 
     User newUser(String userId) {
-        identityService.newUser()
+        identityService.newUser(userId)
     }
 
     boolean saveUser(User user) {

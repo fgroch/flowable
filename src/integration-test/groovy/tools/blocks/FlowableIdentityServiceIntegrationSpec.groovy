@@ -1,22 +1,21 @@
-package tools.blocks.flowable
+package tools.blocks
 
-import grails.test.mixin.TestFor
-import grails.test.runtime.FreshRuntime
-import org.flowable.engine.IdentityService
-import org.flowable.idm.api.User
+
+import grails.test.mixin.integration.Integration
+import grails.transaction.*
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
-import spock.lang.Specification
+import spock.lang.*
+import tools.blocks.flowable.FlowableIdentityService
 
-/**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
- */
-@FreshRuntime
-@TestFor(FlowableIdentityService)
-class FlowableIdentityServiceSpec extends Specification {
+@Integration
+@Rollback
+class FlowableIdentityServiceIntegrationSpec extends Specification {
 
     static loadExternalBeans = true
 
     def doWithSpring = {
+
+
         dataSource(org.springframework.jdbc.datasource.DriverManagerDataSource) {
             return DataSourceBuilder.create()
                     .url(conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.url"))
@@ -48,12 +47,9 @@ class FlowableIdentityServiceSpec extends Specification {
         c.myConfigValue = 'Hello'
     }*/
 
-    //IdentityService identityService
+    FlowableIdentityService flowableIdentityService
 
     def setup() {
-        //identityService = Stub()
-        //service.identityService = identityService
-        identityService.newUser("test") >> {id: "test"}
     }
 
     def cleanup() {
@@ -61,15 +57,14 @@ class FlowableIdentityServiceSpec extends Specification {
 
     def "when service is created identity service is created"() {
         expect:
-            service.identityService != null
+        flowableIdentityService.identityService != null
     }
 
     def "when creating user a new user object is created"() {
         when:
-            def user = service.newUser("test")
+        def user = flowableIdentityService.newUser("test")
         then:
-            service.identityService != null
-            user != null
-            user.id == "test"
+        user != null
+        user.id == "test"
     }
 }

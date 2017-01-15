@@ -79,3 +79,38 @@ grails:
 endpoints:
     jmx:
         unique-names: true
+
+dataSource:
+    pooled: true
+    jmxExport: true
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+environments:
+    development:
+        dataSource:
+            dbCreate: update
+            url: jdbc:postgresql://localhost:5432/flowable
+        flowable:
+            datasource:
+                url: jdbc:postgresql://localhost:5432/flowable
+                dbCreate: update
+                driverClassName: org.postgresql.Driver
+                username: postgres
+                password: postgres
+            deploymentResources: classpath*:/flowable/*.bpmn
+            deploymentMode: single-resource
+    test:
+        dataSource:
+            dbCreate: update
+            url: jdbc:postgresql://localhost:5432/flowable
+        flowable:
+            datasource:
+                url: jdbc:postgresql://localhost:5432/flowable
+                dbCreate: update
+                driverClassName: org.postgresql.Driver
+                username: postgres
+                password: postgres
+            deploymentResources: classpath*:/flowable/*.bpmn
+            deploymentMode: single-resource

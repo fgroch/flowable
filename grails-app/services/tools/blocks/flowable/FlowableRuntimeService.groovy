@@ -1,10 +1,24 @@
 package tools.blocks.flowable
 
 import grails.transaction.Transactional
+import org.flowable.bpmn.model.FlowNode
 import org.flowable.engine.RuntimeService
+import org.flowable.engine.common.api.FlowableException
+import org.flowable.engine.common.api.FlowableIllegalArgumentException
 import org.flowable.engine.common.api.FlowableObjectNotFoundException
+import org.flowable.engine.common.api.delegate.event.FlowableEvent
+import org.flowable.engine.common.api.delegate.event.FlowableEventListener
+import org.flowable.engine.delegate.event.FlowableEngineEventType
+import org.flowable.engine.impl.persistence.entity.VariableInstance
+import org.flowable.engine.runtime.DataObject
+import org.flowable.engine.runtime.Execution
+import org.flowable.engine.runtime.ExecutionQuery
+import org.flowable.engine.runtime.NativeExecutionQuery
+import org.flowable.engine.runtime.NativeProcessInstanceQuery
 import org.flowable.engine.runtime.ProcessInstance
 import org.flowable.engine.runtime.ProcessInstanceBuilder
+import org.flowable.engine.runtime.ProcessInstanceQuery
+import org.flowable.engine.task.Event
 import org.flowable.engine.task.IdentityLink
 import org.flowable.form.model.FormModel
 
@@ -250,5 +264,231 @@ class FlowableRuntimeService {
 
     Map<String, Object> getVariables(String executionId) {
         runtimeService.getVariable(executionId)
+    }
+
+    Map<String, VariableInstance> getVariableInstances(String executionId) {
+        runtimeService.getVariableInstances(executionId)
+    }
+
+    List<VariableInstance> getVariableInstancesByExecutionIds(Set<String> executionIds) {
+        runtimeService.getVariableInstancesByExecutionIds(executionIds)
+    }
+
+    Map<String, Object> getVariablesLocal(String executionId) {
+        runtimeService.getVariablesLocal(executionId)
+    }
+
+    Map<String, VariableInstance> getVariableInstancesLocal(String executionId) {
+        runtimeService.getVariableInstancesLocal(executionId)
+    }
+
+    Map<String, Object> getVariables(String executionId, Collection<String> variableNames) {
+        runtimeService.getVariables(executionId, variableNames)
+    }
+
+    Map<String, VariableInstance> getVariableInstances(String executionId, Collection<String> variableNames) {
+        runtimeService.getVariableInstances(executionId, variableNames)
+    }
+
+    Map<String, Object> getVariablesLocal(String executionId, Collection<String> variableNames) {
+        runtimeService.getVariablesLocal(executionId, variableNames)
+    }
+
+    Map<String, VariableInstance> getVariableInstancesLocal(String executionId, Collection<String> variableNames) {
+        runtimeService.getVariableInstancesLocal(executionId, variableNames)
+    }
+
+    def getVariable(String executionId, String variableName) {
+        runtimeService.getVariable(executionId, variableName)
+    }
+
+    VariableInstance getVariableInstance(String executionId, String variableName) {
+        runtimeService.getVariableInstance(executionId, variableName)
+    }
+
+    boolean hasVariable(String executionId, String variableName) {
+        runtimeService.getVariable(executionId, variableName)
+    }
+
+    def getVariableLocal(String executionId, String variableName) {
+        runtimeService.getVariableLocal(executionId, variableName)
+    }
+
+    VariableInstance getVariableInstanceLocal(String executionId, String variableName) {
+        runtimeService.getVariableInstanceLocal(executionId, variableName)
+    }
+
+    boolean hasVariableLocal(String executionId, String variableName) {
+        runtimeService.hasVariableLocal(executionId, variableName)
+    }
+
+    def setVariable(String executionId, String variableName, Object value) {
+        runtimeService.setVariable(executionId, variableName, value)
+    }
+
+    def setVariableLocal(String executionId, String variableName, Object value) {
+        runtimeService.setVariableLocal(executionId, variableName, value)
+    }
+
+    def removeVariable(String executionId, String variableName) {
+        runtimeService.removeVariable(executionId, variableName)
+    }
+
+    def removeVariableLocal(String executionId, String variableName) {
+        runtimeService.removeVariableLocal(executionId, variableName)
+    }
+
+    def removeVariables(String executionId, Collection<String> variableNames) {
+        runtimeService.removeVariables(executionId, variableNames)
+    }
+
+    def removeVariablesLocal(String executionId, Collection<String> variableNames) {
+        runtimeService.removeVariablesLocal(executionId, variableNames)
+    }
+
+    Map<String, DataObject> getDataObjects(String executionId) {
+        runtimeService.getDataObjects(executionId)
+    }
+
+    Map<String, DataObject> getDataObjects(String executionId, String locale, boolean withLocalizationFallback) {
+        runtimeService.getDataObjects(executionId, locale, withLocalizationFallback)
+    }
+
+    Map<String, DataObject> getDataObjectsLocal(String executionId) {
+        runtimeService.getDataObjectsLocal(executionId)
+    }
+
+    Map<String, DataObject> getDataObjectsLocal(String executionId, String locale, boolean withLocalizationFallback) {
+        runtimeService.getDataObjectsLocal(executionId, locale, withLocalizationFallback)
+    }
+
+    Map<String, DataObject> getDataObjects(String executionId, Collection<String> dataObjectNames) {
+        runtimeService.getDataObjects(executionId, dataObjectNames)
+    }
+
+    Map<String, DataObject> getDataObjects(String executionId, Collection<String> dataObjectNames, String locale, boolean withLocalizationFallback) {
+        runtimeService.getDataObjects(executionId, dataObjectNames, locale, withLocalizationFallback)
+    }
+
+    Map<String, DataObject> getDataObjectsLocal(String executionId, Collection<String> dataObjects) {
+        runtimeService.getDataObjectsLocal(executionId, dataObjects)
+    }
+
+    Map<String, DataObject> getDataObjectsLocal(String executionId, Collection<String> dataObjectNames, String locale, boolean withLocalizationFallback) {
+        runtimeService.getDataObjectsLocal(executionId, dataObjectNames, locale, withLocalizationFallback)
+    }
+
+    DataObject getDataObject(String executionId, String dataObject) {
+        runtimeService.getDataObject(executionId, dataObject)
+    }
+
+    DataObject getDataObject(String executionId, String dataObjectName, String locale, boolean withLocalizationFallback) {
+        runtimeService.getDataObject(executionId, dataObjectName, locale, withLocalizationFallback)
+    }
+
+    DataObject getDataObjectLocal(String executionId, String dataObjectName) {
+        runtimeService.getDataObjectLocal(executionId, dataObjectName)
+    }
+
+    DataObject getDataObjectLocal(String executionId, String dataObjectName, String locale, boolean withLocalizationFallback) {
+        runtimeService.getDataObjectLocal(executionId, dataObjectName, locale, withLocalizationFallback)
+    }
+
+    ExecutionQuery createExecutionQuery() {
+        runtimeService.createExecutionQuery()
+    }
+
+    NativeExecutionQuery createNativeExecutionQuery() {
+        runtimeService.createNativeExecutionQuery()
+    }
+
+    ProcessInstanceQuery createProcessInstanceQuery() {
+        runtimeService.createProcessInstanceQuery()
+    }
+
+    NativeProcessInstanceQuery createNativeProcessInstanceQuery() {
+        runtimeService.createNativeProcessInstanceQuery()
+    }
+
+    boolean suspendProcessInstanceById(String processInstanceId) {
+        try {
+            runtimeService.suspendProcessInstanceById(processInstanceId)
+        } catch (FlowableObjectNotFoundException | FlowableException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean activateProcessInstanceById(String processInstanceId) {
+        try {
+            runtimeService.activateProcessInstanceById(processInstanceId)
+        } catch (FlowableObjectNotFoundException | FlowableException e) {
+            return false
+        }
+        return true
+    }
+    /*
+    void signalEventReceived(String signalName);
+    void signalEventReceivedWithTenantId(String signalName, String tenantId);
+    void signalEventReceivedAsync(String signalName);
+    void signalEventReceivedAsyncWithTenantId(String signalName, String tenantId);
+    void signalEventReceived(String signalName, Map<String, Object> processVariables);
+    void signalEventReceivedWithTenantId(String signalName, Map<String, Object> processVariables, String tenantId);
+    void signalEventReceived(String signalName, String executionId);
+    void signalEventReceived(String signalName, String executionId, Map<String, Object> processVariables);
+    void signalEventReceivedAsync(String signalName, String executionId);
+    void messageEventReceived(String messageName, String executionId);
+    void messageEventReceived(String messageName, String executionId, Map<String, Object> processVariables);
+    void messageEventReceivedAsync(String messageName, String executionId)
+    */
+
+    def addEventListener(FlowableEventListener listenerToAdd) {
+        runtimeService.addEventListener(listenerToAdd)
+    }
+
+    def addEventListener(FlowableEventListener listenerToAdd, FlowableEngineEventType... types) {
+        runtimeService.addEventListener(listenerToAdd, types)
+    }
+
+    def removeEventListener(FlowableEventListener listenerToRemove) {
+        runtimeService.removeEventListener(listenerToRemove)
+    }
+
+    boolean dispatchEvent(FlowableEvent event) {
+        try {
+            runtimeService.dispatchEvent(event)
+        } catch (FlowableIllegalArgumentException | FlowableException e) {
+            return false
+        }
+        return true
+    }
+
+    boolean setProcessInstanceName(String processInstanceId, String name) {
+         try {
+             runtimeService.setProcessInstanceName(processInstanceId, name)
+         } catch (FlowableObjectNotFoundException e) {
+             return false
+         }
+        return true
+    }
+
+    List<Execution> getAdhocSubProcessExecutions(String processInstanceId) {
+        runtimeService.getAdhocSubProcessExecutions(processInstanceId)
+    }
+
+    List<FlowNode> getEnabledActivitiesFromAdhocSubProcess(String executionId) {
+        runtimeService.getEnabledActivitiesFromAdhocSubProcess(executionId)
+    }
+
+    Execution executeActivityInAdhocSubProcess(String executionId, String activityId) {
+        runtimeService.executeActivityInAdhocSubProcess(executionId, activityId)
+    }
+
+    def completeAdhocSubProcess(String executionId) {
+        runtimeService.completeAdhocSubProcess(executionId)
+    }
+
+    List<Event> getProcessInstanceEvents(String processInstanceId) {
+        runtimeService.getProcessInstanceEvents(processInstanceId)
     }
 }

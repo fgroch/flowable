@@ -1,6 +1,6 @@
 package tools.blocks
 
-
+import grails.config.Config
 import grails.test.mixin.integration.Integration
 import grails.transaction.*
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
@@ -14,7 +14,7 @@ class FlowableIdentityServiceIntegrationSpec extends Specification {
     static loadExternalBeans = true
 
     def doWithSpring = {
-
+        Config conf = grailsApplication.config
 
         dataSource(org.springframework.jdbc.datasource.DriverManagerDataSource) {
             return DataSourceBuilder.create()
@@ -66,5 +66,13 @@ class FlowableIdentityServiceIntegrationSpec extends Specification {
         then:
         user != null
         user.id == "test"
+    }
+
+    def "when creating group a new group object is created"() {
+        when:
+        def group = flowableIdentityService.newGroup("test")
+        then:
+        group != null
+        group.id == "test"
     }
 }

@@ -24,14 +24,14 @@ class FlowableRepositoryController {
 
     @Transactional
     def deploy() {
-        if (!params.deplymentFile || !(params.deplymentFile instanceof StandardMultipartHttpServletRequest.StandardMultipartFile)) {
+        if (!params.deploymentFile || !(params.deploymentFile instanceof StandardMultipartHttpServletRequest.StandardMultipartFile)) {
             emptyDeployment()
             return
         }
         def key = params.key ?: null
         def category = params.category ?: null
         String name = params.name ?: ''
-        def deployment = flowableRepositoryService.deploy(params.deplymentFile, name, category, key)
+        def deployment = flowableRepositoryService.deploy(params.deploymentFile, name, category, key)
         respond(deployment: deployment)
     }
 

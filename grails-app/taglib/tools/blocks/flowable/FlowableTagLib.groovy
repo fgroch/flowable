@@ -32,7 +32,7 @@ class FlowableTagLib {
         sb.append("<input id='key' type='hidden' name='key' value='${key}'>")
         sb.append("<label class='btn btn-default btn-file'>")
         sb.append("<span class='fa fa-upload'>")
-        sb.append("<input class='upload-input' type='file' name='uploadFile' id='uploadFile' style='display: none;'>")
+        sb.append("<input class='upload-input' type='file' name='deplymentFile' id='deplymentFile' style='display: none;'>")
         sb.append("</span>")
         sb.append("</label>")
         sb.append("</form>")

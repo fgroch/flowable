@@ -28,8 +28,8 @@ class FlowableRepositoryController {
             emptyDeployment()
             return
         }
-        def key = params.key ?: null
-        def category = params.category ?: null
+        def key = params.key
+        def category = params.category
         String name = params.name ?: ''
         def deployment = flowableRepositoryService.deploy(params.deploymentFile, name, category, key)
         respond(deployment: deployment)

@@ -1,0 +1,8 @@
+[[introduction]]
+== Introduction to the Flowable Plugin
+
+
+=== Release History and Acknowledgment
+
+
+include::introduction/gettingStarted.adoc[]

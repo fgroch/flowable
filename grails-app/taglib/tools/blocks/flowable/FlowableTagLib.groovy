@@ -12,7 +12,7 @@ class FlowableTagLib {
 
         if(deploymentId) {
             def downloadLink = g.createLink(controller: controller, action: action, params: ['deploymentId': deploymentId])
-            sb.append("<a class='btn btn-default' href='${downloadLink}'>${label} <span class='fa fa-download'></span></a>")
+            sb.append("<a class='btn btn-default btn-download-diagram' href='${downloadLink}'>${label} <span class='fa fa-download'></span></a>")
         }
 
         out << sb.toString()
@@ -45,5 +45,56 @@ class FlowableTagLib {
         sb.append("</script>")
 
         out << sb.toString()
+    }
+
+    def claimButton = { attrs, body ->
+        def taskId = attrs.remove('taskId')
+        def userId = attrs.remove('userId')
+        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def action = attrs.remove('action') ?: 'claim'
+        def label = attrs.remove('label') ?: ''
+        final StringBuilder sb = new StringBuilder()
+
+        if(taskId || userId) {
+            def claimLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId, 'userId':userId])
+            sb.append("<a class='btn btn-default btn-claim' href='${claimLink}'>${label} <span class='fa fa-sign-in'></span></a>")
+        }
+
+        out << sb.toString()
+    }
+
+    def unclaim = { attrs, body ->
+        def taskId = attrs.remove('taskId')
+        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def action = attrs.remove('action') ?: 'unclaim'
+        def label = attrs.remove('label') ?: ''
+        final StringBuilder sb = new StringBuilder()
+
+        if(taskId) {
+            def unclaimLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId])
+            sb.append("<a class='btn btn-default btn-unclaim' href='${unclaimLink}'>${label} <span class='fa fa-sign-out'></span></a>")
+        }
+
+        out << sb.toString()
+    }
+
+    def saveButton = { attrs, body ->
+
+    }
+
+    def deleteButton = { attrs, body ->
+
+    }
+
+    def completeButton = { attrs, body ->
+
+    }
+
+    def delegateButton = { attrs, body ->
+
+    }
+
+    def resolveButton = { attrs, body ->
+
     }
 }

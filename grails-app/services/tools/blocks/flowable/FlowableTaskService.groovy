@@ -106,7 +106,7 @@ class FlowableTaskService {
         return true
     }
 
-    boolean claim(String taskId) {
+    boolean unclaim(String taskId) {
         try {
             taskService.unclaim(taskId)
         } catch (FlowableObjectNotFoundException e) {

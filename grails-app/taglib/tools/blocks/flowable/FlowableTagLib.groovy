@@ -47,11 +47,11 @@ class FlowableTagLib {
         out << sb.toString()
     }
 
-    def claimButton = { attrs, body ->
+    def claimTaskButton = { attrs, body ->
         def taskId = attrs.remove('taskId')
         def userId = attrs.remove('userId')
         def controller = attrs.remove('controller') ?: 'flowableRepository'
-        def action = attrs.remove('action') ?: 'claim'
+        def action = attrs.remove('action') ?: 'claimTask'
         def label = attrs.remove('label') ?: ''
         final StringBuilder sb = new StringBuilder()
 
@@ -63,10 +63,10 @@ class FlowableTagLib {
         out << sb.toString()
     }
 
-    def unclaim = { attrs, body ->
+    def unclaimTaskButton = { attrs, body ->
         def taskId = attrs.remove('taskId')
         def controller = attrs.remove('controller') ?: 'flowableRepository'
-        def action = attrs.remove('action') ?: 'unclaim'
+        def action = attrs.remove('action') ?: 'unclaimTask'
         def label = attrs.remove('label') ?: ''
         final StringBuilder sb = new StringBuilder()
 
@@ -78,23 +78,35 @@ class FlowableTagLib {
         out << sb.toString()
     }
 
-    def saveButton = { attrs, body ->
+    def newTaskButton = { attrs, body ->
+        def taskId = attrs.remove('taskId') ?: 0
+        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def action = attrs.remove('action') ?: 'newTask'
+        def label = attrs.remove('label') ?: ''
+        final StringBuilder sb = new StringBuilder()
+
+        def newLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId])
+        sb.append("<a class='btn btn-default btn-new' href='${newLink}'>${label} <span class='fa fa-floppy-o'></span></a>")
+
+        out << sb.toString()
+    }
+
+    def saveTaskButton = { attrs, body ->
+    }
+
+    def deleteTaskButton = { attrs, body ->
 
     }
 
-    def deleteButton = { attrs, body ->
+    def completeTaskButton = { attrs, body ->
 
     }
 
-    def completeButton = { attrs, body ->
+    def delegateTaskButton = { attrs, body ->
 
     }
 
-    def delegateButton = { attrs, body ->
-
-    }
-
-    def resolveButton = { attrs, body ->
+    def resolveTaskButton = { attrs, body ->
 
     }
 }

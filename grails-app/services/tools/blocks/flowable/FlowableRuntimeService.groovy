@@ -39,15 +39,15 @@ class FlowableRuntimeService {
     ProcessInstance startProcessInstanceByKey(String processDefinitionKey, String businessKey, Map<String, Object> variables, String tenantId) {
         if (tenantId && !tenantId.empty) {//versions  tenant
             if (businessKey && !businessKey.empty) {
-                startProcessInstanceByKeyAndTenantId(processDefinitionKey, businessKey, variables, tenantId)
+                return startProcessInstanceByKeyAndTenantId(processDefinitionKey, businessKey, variables, tenantId)
             } else {
-                startProcessInstanceByKeyAndTenantId(processDefinitionKey, variables, tenantId)
+                return startProcessInstanceByKeyAndTenantId(processDefinitionKey, variables, tenantId)
             }
         } else {
             if (businessKey && !businessKey.empty) {
-                startProcessInstanceByKey(processDefinitionKey, businessKey, variables)
+                return startProcessInstanceByKey(processDefinitionKey, businessKey, variables)
             } else {
-                startProcessInstanceByKey(processDefinitionKey, variables)
+                return startProcessInstanceByKey(processDefinitionKey, variables)
             }
         }
     }
@@ -85,6 +85,16 @@ class FlowableRuntimeService {
     }
 
     //...ById methods
+
+    ProcessInstance startProcessInstanceById(String processDefinitionId, String businessKey, String outcome, Map<String, Object> variables, String processInstanceName) {
+        if (processInstanceName && !processInstanceName.empty) {
+            return startProcessInstanceWithForm(processDefinitionId, outcome, variables, processInstanceName)
+        } else if (businessKey) {
+            return startProcessInstanceById(processDefinitionId, businessKey, variables)
+        } else {
+            return startProcessInstanceById(processDefinitionId, variables)
+        }
+    }
 
     ProcessInstance startProcessInstanceById(String processDefinitionId) {
         runtimeService.startProcessInstanceById(processDefinitionId)

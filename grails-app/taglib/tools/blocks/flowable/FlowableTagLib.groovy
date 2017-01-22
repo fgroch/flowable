@@ -47,6 +47,36 @@ class FlowableTagLib {
         out << sb.toString()
     }
 
+    def startProcessInstanceButton = { attrs, body ->
+        def processDefinitionKey = attrs.remove('processDefinitionKey')
+        def businessKey = attrs.remove('businessKey')
+        def tenantId = attrs.remove('tenantId')
+        def processDefinitionId = attrs.remove('processDefinitionId')
+        def processInstanceName = attrs.remove('processInstanceName')
+        def iconClass = attrs.remove('iconInstance')
+        def additionalClasses = attrs.remove('additionalClasses') ?: ''
+
+        def controller = attrs.remove('controller') ?: 'flowableRuntime'
+        def action = attrs.remove('action') ?: 'startProcessInstance'
+        def label = attrs.remove('label') ?: ''
+        final StringBuilder sb = new StringBuilder()
+        def claimLink = g.createLink(controller: controller, action: action,
+                params: [
+                        'processDefinitionKey': processDefinitionKey,
+                        'businessKey':businessKey,
+                        'tenantId': tenantId,
+                        'processDefinitionId': processDefinitionId,
+                        'processInstanceName': processInstanceName
+                    ])
+        sb.append("<a class='btn btn-default btn-claim ${additionalClasses}' href='${claimLink}'>${label} ")
+        if (iconClass && !iconClass.emty) {
+            sb.append(" <span class='${iconClass}'></span>")
+        }
+        sb.append("</a>")
+
+        out << sb.toString()
+    }
+
     def claimTaskButton = { attrs, body ->
         def taskId = attrs.remove('taskId')
         def userId = attrs.remove('userId')

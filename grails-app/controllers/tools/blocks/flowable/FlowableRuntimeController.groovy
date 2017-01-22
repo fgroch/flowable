@@ -9,14 +9,18 @@ class FlowableRuntimeController {
     def flowableRuntimeService
 
     @Transactional
-    def startProcessInstanceByKey() {
+    def startProcessInstance() {
+        ProcessInstance processInstance
         if (params.processDefinitionKey) {
-            ProcessInstance processInstance = flowableRuntimeService.startProcessInstanceByKey(params.processDefinitionKey, params.businessKey, params.variables, params.tenantId)
+            processInstance = flowableRuntimeService.startProcessInstanceByKey(params.processDefinitionKey, params.businessKey, params.variables, params.tenantId)
         } else if (params.processDefinitionId) {
             String outcome
-            startProcessInstanceById(params.processDefinitionId, params.businessKey, outcome, params.variables, params.processInstanceName)
+            processInstance = startProcessInstanceById(params.processDefinitionId, params.businessKey, outcome, params.variables, params.processInstanceName)
         } else {
             notFound()
+        }
+        if (!processInstance) {
+            notStart()
         }
     }
 
@@ -27,6 +31,16 @@ class FlowableRuntimeController {
                 respond false, [status: NO_CONTENT]
             }
             '*'{ render status: NO_CONTENT, text: message(code: 'flowable.deployment.not.found', default: 'Deployment not found') }
+        }
+    }
+
+    protected void notStart() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'flowable.process.not.start', default: 'Process cannot be started')
+                respond false, [status: NO_CONTENT]
+            }
+            '*'{ render status: NO_CONTENT, text: message(code: 'flowable.process.not.start', default: 'Process cannot be started') }
         }
     }
 }

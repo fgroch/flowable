@@ -2,6 +2,7 @@ package tools.blocks.flowable.tools.blocks.flowable.task
 
 import grails.validation.Validateable
 import org.flowable.engine.task.DelegationState
+import org.flowable.engine.task.Task
 
 /**
  * Created by fgroch on 21.01.17.
@@ -27,4 +28,12 @@ class TaskCmd implements Validateable {
     Map<String, Object> processVariables
     Date claimTime
     DelegationState delegationState
+
+    void mapFromEntity(final Task task) {
+        this.properties = task.properties
+    }
+
+    void mapToEntity(final Task task) {
+        task.properties = this.properties
+    }
 }

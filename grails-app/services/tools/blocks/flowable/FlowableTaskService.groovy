@@ -15,6 +15,7 @@ import org.flowable.engine.task.NativeTaskQuery
 import org.flowable.engine.task.Task
 import org.flowable.engine.task.TaskQuery
 import org.flowable.form.model.FormModel
+import tools.blocks.flowable.tools.blocks.flowable.task.TaskCmd
 
 @Transactional
 class FlowableTaskService {

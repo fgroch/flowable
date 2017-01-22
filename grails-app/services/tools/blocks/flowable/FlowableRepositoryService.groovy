@@ -40,8 +40,8 @@ class FlowableRepositoryService {
         if (!name) {
             name = file.filename ?: 'undefined name'
         }
-        ZipInputStream inputStream = new ZipInputStream(file.inputStream)
-        Deployment deployment = repositoryService.createDeployment().name(name).addZipInputStream(inputStream).deploy()
+        //ZipInputStream inputStream = new ZipInputStream(file.inputStream)
+        Deployment deployment = repositoryService.createDeployment().name(name).addInputStream(file.filename, file.inputStream).deploy()
         if (category) {
             setDeploymentCategory(deployment.id ,category)
         }

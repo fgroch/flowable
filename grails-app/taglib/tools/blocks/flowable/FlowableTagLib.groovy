@@ -69,7 +69,7 @@ class FlowableTagLib {
                         'processInstanceName': processInstanceName
                     ])
         sb.append("<a class='btn btn-default btn-claim ${additionalClasses}' href='${claimLink}'>${label} ")
-        if (iconClass && !iconClass.emty) {
+        if (iconClass && !iconClass.empty) {
             sb.append(" <span class='${iconClass}'></span>")
         }
         sb.append("</a>")

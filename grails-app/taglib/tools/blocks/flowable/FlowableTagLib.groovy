@@ -146,7 +146,26 @@ class FlowableTagLib {
     }
 
     def deleteTaskButton = { attrs, body ->
+        //
+        def taskId = attrs.remove('taskId')
+        def deleteReason = attrs.remove('deleteReason')
+        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def action = attrs.remove('action') ?: 'deleteTask'
+        def label = attrs.remove('label') ?: ''
+        def iconClass = attrs.remove('iconClass')
+        def additionalClasses = attrs.remove('additionalClasses') ?: ''
+        final StringBuilder sb = new StringBuilder()
 
+        if(taskId) {
+            def deleteLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId, 'deleteReason': deleteReason])
+            sb.append("<a class='btn btn-default btn-delete ${additionalClasses}' href='${deleteLink}'>${label} ")
+            if (iconClass && !iconClass.empty) {
+                sb.append(" <span class='${iconClass}'></span>")
+            }
+            sb.append("</a>")
+        }
+//fa fa-trash
+        out << sb.toString()
     }
 
     def completeTaskButton = { attrs, body ->
@@ -175,6 +194,23 @@ class FlowableTagLib {
     }
 
     def resolveTaskButton = { attrs, body ->
+        def taskId = attrs.remove('taskId')
+        def controller = attrs.remove('controller') ?: 'flowableTask'
+        def action = attrs.remove('action') ?: 'resolveTask'
+        def label = attrs.remove('label') ?: ''
+        def iconClass = attrs.remove('iconClass')
+        def additionalClasses = attrs.remove('additionalClasses') ?: ''
+        final StringBuilder sb = new StringBuilder()
 
+        if(taskId) {
+            def resolveLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId])
+            sb.append("<a class='btn btn-default btn-resolve ${additionalClasses}' href='${resolveLink}'>${label} ")
+            if (iconClass && !iconClass.empty) {
+                sb.append(" <span class='${iconClass}'></span>")
+            }
+            sb.append("</a>")
+        }
+//mail-reply
+        out << sb.toString()
     }
 }

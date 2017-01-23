@@ -129,7 +129,24 @@ class FlowableTagLib {
     }
 
     def completeTaskButton = { attrs, body ->
+        def taskId = attrs.remove('taskId')
+        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def action = attrs.remove('action') ?: 'completeTask'
+        def label = attrs.remove('label') ?: ''
+        def iconClass = attrs.remove('iconInstance')
+        def additionalClasses = attrs.remove('additionalClasses') ?: ''
+        final StringBuilder sb = new StringBuilder()
 
+        if(taskId) {
+            def completeLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId])
+            sb.append("<a class='btn btn-default btn-unclaim ${additionalClasses}' href='${completeLink}'>${label} ")
+            if (iconClass && !iconClass.empty) {
+                sb.append(" <span class='${iconClass}'></span>")
+            }
+            sb.append("</a>")
+        }
+
+        out << sb.toString()
     }
 
     def delegateTaskButton = { attrs, body ->

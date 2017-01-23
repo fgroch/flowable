@@ -53,7 +53,7 @@ class FlowableTagLib {
         def tenantId = attrs.remove('tenantId')
         def processDefinitionId = attrs.remove('processDefinitionId')
         def processInstanceName = attrs.remove('processInstanceName')
-        def iconClass = attrs.remove('iconInstance')
+        def iconClass = attrs.remove('iconClass')
         def additionalClasses = attrs.remove('additionalClasses') ?: ''
 
         def controller = attrs.remove('controller') ?: 'flowableRuntime'
@@ -83,13 +83,19 @@ class FlowableTagLib {
         def controller = attrs.remove('controller') ?: 'flowableRepository'
         def action = attrs.remove('action') ?: 'claimTask'
         def label = attrs.remove('label') ?: ''
+        def iconClass = attrs.remove('iconClass')
+        def additionalClasses = attrs.remove('additionalClasses') ?: ''
         final StringBuilder sb = new StringBuilder()
 
         if(taskId || userId) {
             def claimLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId, 'userId':userId])
-            sb.append("<a class='btn btn-default btn-claim' href='${claimLink}'>${label} <span class='fa fa-sign-in'></span></a>")
+            sb.append("<a class='btn btn-default btn-claim ${additionalClasses}' href='${claimLink}'>${label}")
+            if (iconClass && !iconClass.empty) {
+                sb.append(" <span class='${iconClass}'></span>")
+            }
+            sb.append("</a>")
         }
-
+//fa fa-sign-in
         out << sb.toString()
     }
 
@@ -98,13 +104,19 @@ class FlowableTagLib {
         def controller = attrs.remove('controller') ?: 'flowableRepository'
         def action = attrs.remove('action') ?: 'unclaimTask'
         def label = attrs.remove('label') ?: ''
+        def iconClass = attrs.remove('iconClass')
+        def additionalClasses = attrs.remove('additionalClasses') ?: ''
         final StringBuilder sb = new StringBuilder()
 
         if(taskId) {
             def unclaimLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId])
-            sb.append("<a class='btn btn-default btn-unclaim' href='${unclaimLink}'>${label} <span class='fa fa-sign-out'></span></a>")
+            sb.append("<a class='btn btn-default btn-unclaim ${additionalClasses}' href='${unclaimLink}'>${label}")
+            if (iconClass && !iconClass.empty) {
+                sb.append(" <span class='${iconClass}'></span>")
+            }
+            sb.append("</a>")
         }
-
+//fa fa-sign-out
         out << sb.toString()
     }
 
@@ -113,15 +125,24 @@ class FlowableTagLib {
         def controller = attrs.remove('controller') ?: 'flowableRepository'
         def action = attrs.remove('action') ?: 'newTask'
         def label = attrs.remove('label') ?: ''
+        def iconClass = attrs.remove('iconClass')
+        def additionalClasses = attrs.remove('additionalClasses') ?: ''
         final StringBuilder sb = new StringBuilder()
 
         def newLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId])
-        sb.append("<a class='btn btn-default btn-new' href='${newLink}'>${label} <span class='fa fa-floppy-o'></span></a>")
+        sb.append("<a class='btn btn-default btn-new ${additionalClasses}' href='${newLink}'>${label}")
+        if (iconClass && !iconClass.empty) {
+            sb.append(" <span class='${iconClass}'></span>")
+        }
+        sb.append("</a>")
 
         out << sb.toString()
     }
 
     def saveTaskButton = { attrs, body ->
+        //fa fa-floppy-o
+        //def iconClass = attrs.remove('iconClass')
+        //def additionalClasses = attrs.remove('additionalClasses') ?: ''
     }
 
     def deleteTaskButton = { attrs, body ->
@@ -133,13 +154,13 @@ class FlowableTagLib {
         def controller = attrs.remove('controller') ?: 'flowableRepository'
         def action = attrs.remove('action') ?: 'completeTask'
         def label = attrs.remove('label') ?: ''
-        def iconClass = attrs.remove('iconInstance')
+        def iconClass = attrs.remove('iconClass')
         def additionalClasses = attrs.remove('additionalClasses') ?: ''
         final StringBuilder sb = new StringBuilder()
 
         if(taskId) {
             def completeLink = g.createLink(controller: controller, action: action, params: ['taskId': taskId])
-            sb.append("<a class='btn btn-default btn-unclaim ${additionalClasses}' href='${completeLink}'>${label} ")
+            sb.append("<a class='btn btn-default btn-complete ${additionalClasses}' href='${completeLink}'>${label} ")
             if (iconClass && !iconClass.empty) {
                 sb.append(" <span class='${iconClass}'></span>")
             }

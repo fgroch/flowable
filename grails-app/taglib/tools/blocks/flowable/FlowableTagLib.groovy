@@ -80,7 +80,7 @@ class FlowableTagLib {
     def claimTaskButton = { attrs, body ->
         def taskId = attrs.remove('taskId')
         def userId = attrs.remove('userId')
-        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
         def action = attrs.remove('action') ?: 'claimTask'
         def label = attrs.remove('label') ?: ''
         def iconClass = attrs.remove('iconClass')
@@ -101,7 +101,7 @@ class FlowableTagLib {
 
     def unclaimTaskButton = { attrs, body ->
         def taskId = attrs.remove('taskId')
-        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
         def action = attrs.remove('action') ?: 'unclaimTask'
         def label = attrs.remove('label') ?: ''
         def iconClass = attrs.remove('iconClass')
@@ -122,7 +122,7 @@ class FlowableTagLib {
 
     def newTaskButton = { attrs, body ->
         def taskId = attrs.remove('taskId') ?: 0
-        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
         def action = attrs.remove('action') ?: 'newTask'
         def label = attrs.remove('label') ?: ''
         def iconClass = attrs.remove('iconClass')
@@ -149,7 +149,7 @@ class FlowableTagLib {
         //
         def taskId = attrs.remove('taskId')
         def deleteReason = attrs.remove('deleteReason')
-        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
         def action = attrs.remove('action') ?: 'deleteTask'
         def label = attrs.remove('label') ?: ''
         def iconClass = attrs.remove('iconClass')
@@ -170,7 +170,7 @@ class FlowableTagLib {
 
     def completeTaskButton = { attrs, body ->
         def taskId = attrs.remove('taskId')
-        def controller = attrs.remove('controller') ?: 'flowableRepository'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
         def action = attrs.remove('action') ?: 'completeTask'
         def label = attrs.remove('label') ?: ''
         def iconClass = attrs.remove('iconClass')

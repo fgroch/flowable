@@ -19,27 +19,76 @@ class FlowableTaskController {
                 '*'{ render status: OK, text: message(code: 'flowable.claim.ok', default: 'Task claimed') }
             }
         }
-
     }
 
     def unclaimTask() {
-
+        if (!flowableTaskService.unclaim(params.taskId)) {
+            unsuccessfulAction()
+        } else {
+            request.withFormat {
+                form multipartForm {
+                    flash.message = message(code: 'flowable.unclaim.ok', default: 'Task unclaimed')
+                    respond false, [status: OK]
+                }
+                '*'{ render status: OK, text: message(code: 'flowable.unclaim.ok', default: 'Task unclaimed') }
+            }
+        }
     }
 
     def deleteTask() {
-
+        if (!flowableTaskService.deleteTask(params.taskId, params.deleteReason)) {
+            unsuccessfulAction()
+        } else {
+            request.withFormat {
+                form multipartForm {
+                    flash.message = message(code: 'flowable.delete.ok', default: 'Task deleted')
+                    respond false, [status: OK]
+                }
+                '*'{ render status: OK, text: message(code: 'flowable.delete.ok', default: 'Task deleted') }
+            }
+        }
     }
 
     def resolveTask() {
-
+        if (!flowableTaskService.resolveTask(params.taskId)) {
+            unsuccessfulAction()
+        } else {
+            request.withFormat {
+                form multipartForm {
+                    flash.message = message(code: 'flowable.resolve.ok', default: 'Task resolved')
+                    respond false, [status: OK]
+                }
+                '*'{ render status: OK, text: message(code: 'flowable.resolve.ok', default: 'Task resolved') }
+            }
+        }
     }
 
     def completeTask() {
-
+        if (!flowableTaskService.complete(params.taskId)) {
+            unsuccessfulAction()
+        } else {
+            request.withFormat {
+                form multipartForm {
+                    flash.message = message(code: 'flowable.complete.ok', default: 'Task completed')
+                    respond false, [status: OK]
+                }
+                '*'{ render status: OK, text: message(code: 'flowable.complete.ok', default: 'Task completed') }
+            }
+        }
     }
 
     def delegateTask() {
-
+        if (!flowableTaskService.delegateTask(params.taskId, params.userId)) {
+            unsuccessfulAction()
+        } else {
+            request.withFormat {
+                form multipartForm {
+                    flash.message = message(code: 'flowable.delegate.ok', default: 'Task delegated')
+                    respond false, [status: OK]
+                }
+                '*'{ render status: OK, text: message(code: 'flowable.delegate.ok', default: 'Task delegated') }
+            }
+        }
     }
 
     def saveTask() {

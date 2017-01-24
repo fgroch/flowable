@@ -15,8 +15,17 @@ class FlowableTagLibSpec extends Specification {
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
+    void "resolveTaskButton as method"() {
+        given:
+            def attr = [taskId:1, iconClass:"fa fa-test"]
+        expect:
+            tagLib.resolveTaskButton(attr, null).toString() == "<a class='btn btn-default btn-resolve ' href='/flowableTask/resolveTask?taskId=1'>  <span class='fa fa-test'></span></a>"
+    }
+
+    void "claimTaskButton as method"() {
+        given:
+        def attr = [taskId:1, iconClass:"fa fa-test", userId:"test"]
+        expect:
+        tagLib.claimTaskButton(attr, null).toString() == "<a class='btn btn-default btn-claim ' href='/flowableTask/claimTask?taskId=1&userId=test'> <span class='fa fa-test'></span></a>"
     }
 }

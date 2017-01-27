@@ -42,4 +42,11 @@ class FlowableTagLibSpec extends Specification {
         expect:
         tagLib.completeTaskButton(attr, null).toString() == "<a class='btn btn-default btn-complete ' href='/flowableTask/completeTask?taskId=1'>  <span class='fa fa-test'></span></a>"
     }
+
+    void "deleteTask as method"() {
+        given:
+        def attr = [taskId:1, iconClass:"fa fa-test", deleteReason:'none']
+        expect:
+        tagLib.deleteTaskButton(attr, null).toString() == "<a class='btn btn-default btn-delete ' href='/flowableTask/deleteTask?taskId=1&deleteReason=none'>  <span class='fa fa-test'></span></a>"
+    }
 }

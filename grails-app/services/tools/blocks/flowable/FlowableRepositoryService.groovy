@@ -8,6 +8,7 @@ import org.flowable.engine.app.AppModel
 import org.flowable.engine.common.api.FlowableException
 import org.flowable.engine.common.api.FlowableObjectNotFoundException
 import org.flowable.engine.repository.Deployment
+import org.flowable.engine.repository.DeploymentBuilder
 import org.flowable.engine.repository.DiagramLayout
 import org.flowable.engine.repository.Model
 import org.flowable.engine.repository.ProcessDefinition
@@ -21,6 +22,10 @@ import java.util.zip.ZipInputStream
 class FlowableRepositoryService {
 
     RepositoryService repositoryService
+
+    DeploymentBuilder createDeployment() {
+        repositoryService.createDeployment()
+    }
 
     def deploymentsCount() {
         repositoryService.createDeploymentQuery().count()

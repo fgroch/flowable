@@ -60,4 +60,11 @@ class FlowableRepositoryServiceIntegrationSpec extends Specification {
         expect:
         flowableRepositoryService.repositoryService != null
     }
+
+    def "when process is deployed deployment id won't be null"() {
+        when:
+            String deploymentId = flowableRepositoryService.createDeployment().addClasspathResource("tools/blocks/diagrams/testX.bmpn20.xml").name("testX").deploy().id
+        then:
+            deploymentId != null
+    }
 }

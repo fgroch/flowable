@@ -4,6 +4,7 @@ import grails.config.Config
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
+import org.grails.io.support.GrailsResourceUtils
 import spock.lang.Specification
 import tools.blocks.flowable.FlowableRepositoryService
 
@@ -63,7 +64,8 @@ class FlowableRepositoryServiceIntegrationSpec extends Specification {
 
     def "when process is deployed deployment id won't be null"() {
         when:
-            String deploymentId = flowableRepositoryService.createDeployment().addClasspathResource("tools/blocks/diagrams/testX.bmpn20.xml").name("testX").deploy().id
+
+            String deploymentId = flowableRepositoryService.createDeployment().addClasspathResource("testX.bmpn20.xml").name("testX").deploy().id
         then:
             deploymentId != null
     }

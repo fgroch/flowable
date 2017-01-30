@@ -4,14 +4,14 @@ class FlowableTagLib {
     static namespace = "flowable"
 
     def downloadDiagram = { attrs, body ->
-        def deploymentId = attrs.remove('deploymentId')
+        def deploymentKey = attrs.remove('deploymentKey')
         def controller = attrs.remove('controller') ?: 'flowableRepository'
         def action = attrs.remove('action') ?: 'getProcessDiagram'
         def label = attrs.remove('label') ?: ''
         final StringBuilder sb = new StringBuilder()
 
-        if(deploymentId) {
-            def downloadLink = g.createLink(controller: controller, action: action, params: ['deploymentId': deploymentId])
+        if(deploymentKey) {
+            def downloadLink = g.createLink(controller: controller, action: action, params: ['deploymentKey': deploymentKey])
             sb.append("<a class='btn btn-default btn-download-diagram' href='${downloadLink}'>${label} <span class='fa fa-download'></span></a>")
         }
 

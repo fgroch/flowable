@@ -162,16 +162,16 @@ class FlowableRepositoryController {
 
     def getProcessDiagram() {
 
-        if (!params.deploymentId) {
+        if (!params.deploymentKey) {
             emptyDeployment()
             return
         }
         def inputStream
         try {
-            inputStream = flowableRepositoryService.getProcessDiagram(params.deploymentId)
+            inputStream = flowableRepositoryService.getProcessDiagramResource(params.deploymentKey)
             if (inputStream) {
 
-                ['Content-disposition': "${params.containsKey('inline') ? 'inline' : 'attachment'};filename=\"$params.deploymentId + '.png'\"",
+                ['Content-disposition': "${params.containsKey('inline') ? 'inline' : 'attachment'};filename=\"${params.deploymentKey}.png\"",
                  'Cache-Control'      : 'private',
                  'Pragma'             : ''].each { k, v ->
                     response.setHeader(k, v)

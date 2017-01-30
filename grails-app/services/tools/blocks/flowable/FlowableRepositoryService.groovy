@@ -155,6 +155,17 @@ class FlowableRepositoryService {
         repositoryService.getProcessModel(processDefinitionId)
     }
 
+    InputStream getProcessDiagramResource(String processDefinitionKey) {
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionKey(processDefinitionKey)
+                .singleResult();
+        String diagramResourceName = processDefinition.getDiagramResourceName();
+        InputStream imageStream = repositoryService.getResourceAsStream(
+                processDefinition.getDeploymentId(), diagramResourceName);
+        imageStream
+        //repositoryService.getProcessDiagram(processDefinitionId)
+    }
+
     InputStream getProcessDiagram(String processDefinitionId) {
         repositoryService.getProcessDiagram(processDefinitionId)
     }

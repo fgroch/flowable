@@ -9,9 +9,11 @@ import org.flowable.engine.common.api.FlowableException
 import org.flowable.engine.common.api.FlowableObjectNotFoundException
 import org.flowable.engine.repository.Deployment
 import org.flowable.engine.repository.DeploymentBuilder
+import org.flowable.engine.repository.DeploymentQuery
 import org.flowable.engine.repository.DiagramLayout
 import org.flowable.engine.repository.Model
 import org.flowable.engine.repository.ProcessDefinition
+import org.flowable.engine.repository.ProcessDefinitionQuery
 import org.flowable.engine.task.IdentityLink
 import org.flowable.form.api.FormDefinition
 import org.flowable.validation.ValidationError
@@ -25,6 +27,14 @@ class FlowableRepositoryService {
 
     DeploymentBuilder createDeployment() {
         repositoryService.createDeployment()
+    }
+
+    DeploymentQuery createDeploymentQuery() {
+        repositoryService.createDeploymentQuery()
+    }
+
+    ProcessDefinitionQuery createProcessDefinitionQuery() {
+        repositoryService.createProcessDefinitionQuery()
     }
 
     def deploymentsCount() {

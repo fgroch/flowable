@@ -4,6 +4,7 @@ import grails.config.Config
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.flowable.engine.repository.Deployment
+import org.flowable.engine.repository.ProcessDefinition
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
 import org.grails.io.support.ClassPathResource
 import org.grails.io.support.GrailsResourceUtils
@@ -53,13 +54,20 @@ class FlowableRepositoryServiceIntegrationSpec extends Specification {
     FlowableRepositoryService flowableRepositoryService
     Resource r
     Deployment deployment
+    ProcessDefinition processDefinition
+    String deploymentKey
+    String deploymentId
 
     def setup() {
         r = new ClassPathResource("testX.bpmn20.xml")
     }
 
     def deployProcess() {
-        deployment = flowableRepositoryService.createDeployment().addInputStream("testX", r.inputStream).name("testX").deploy()
+        deployment = flowableRepositoryService.createDeployment().addInputStream("testX", r.inputStream).key("testX").name("testX").deploy()
+        deploymentKey = deployment.key
+        deploymentId = deployment.id
+        processDefinition = flowableRepositoryService.createProcessDefinitionQuery().processDefinitionKey("testX").singleResult()
+        //System.println("--deploymentKey:" + deploymentKey + "--")
     }
 
     def cleanup() {
@@ -71,16 +79,16 @@ class FlowableRepositoryServiceIntegrationSpec extends Specification {
         flowableRepositoryService.repositoryService != null
     }
 
-    def "when process is deployed deployment id won't be null"() {
+    def "when process definition is deployed deployment id won't be null"() {
         when:
             deployProcess()
-            String deploymentId = deployment.id
+            deploymentId = deployment.id
             System.println(deploymentId)
         then:
             deploymentId != null
     }
 
-    def "when process is deployed, deployments count should be greater than before deploy"() {
+    def "when process definition is deployed, deployments count should be greater than before deploy"() {
         when:
             def cntBefore = flowableRepositoryService.deploymentsCount()
             System.println(cntBefore)
@@ -89,5 +97,25 @@ class FlowableRepositoryServiceIntegrationSpec extends Specification {
             System.println(cntAfter)
         then:
             cntAfter > cntBefore
+    }
+
+    def "when process definition is suspended then isProcessDefinitionSuspended service method should return true"() {
+        when:
+            deployProcess()
+            flowableRepositoryService.suspendProcessDefinitionById(processDefinition.id)
+            boolean isSuspended = flowableRepositoryService.isProcessDefinitionSuspended(processDefinition.id)
+        then:
+            isSuspended
+    }
+
+    def "when process definition is suspended then after activation isProcessDefinitionSuspended service method should return false"() {
+        when:
+        deployProcess()
+        flowableRepositoryService.suspendProcessDefinitionById(processDefinition.id)
+        boolean isSuspendedBefore = flowableRepositoryService.isProcessDefinitionSuspended(processDefinition.id)
+        flowableRepositoryService.activateProcessDefinitionById(processDefinition.id)
+        boolean isSuspendedAfter = flowableRepositoryService.isProcessDefinitionSuspended(processDefinition.id)
+        then:
+            isSuspendedBefore && !isSuspendedAfter
     }
 }

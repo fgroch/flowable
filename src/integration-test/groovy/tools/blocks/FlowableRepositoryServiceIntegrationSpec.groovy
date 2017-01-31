@@ -3,6 +3,7 @@ package tools.blocks
 import grails.config.Config
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
+import org.flowable.engine.repository.Deployment
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
 import org.grails.io.support.ClassPathResource
 import org.grails.io.support.GrailsResourceUtils
@@ -50,9 +51,15 @@ class FlowableRepositoryServiceIntegrationSpec extends Specification {
     }
 
     FlowableRepositoryService flowableRepositoryService
+    Resource r
+    Deployment deployment
 
     def setup() {
+        r = new ClassPathResource("testX.bpmn20.xml")
+    }
 
+    def deployProcess() {
+        deployment = flowableRepositoryService.createDeployment().addInputStream("testX", r.inputStream).name("testX").deploy()
     }
 
     def cleanup() {
@@ -66,12 +73,21 @@ class FlowableRepositoryServiceIntegrationSpec extends Specification {
 
     def "when process is deployed deployment id won't be null"() {
         when:
-            Resource r = new ClassPathResource("testX.bpmn20.xml")
-            System.out.println(r.exists())
-            System.out.println(GrailsResourceUtils.toURI("testX.bpmn20.xml"))
-            URI uri = GrailsResourceUtils.toURI("testX.bpmn20.xml")
-            String deploymentId = flowableRepositoryService.createDeployment().addInputStream("testX", r.inputStream).name("testX").deploy().id
+            deployProcess()
+            String deploymentId = deployment.id
+            System.println(deploymentId)
         then:
             deploymentId != null
+    }
+
+    def "when process is deployed, deployments count should be greater than before deploy"() {
+        when:
+            def cntBefore = flowableRepositoryService.deploymentsCount()
+            System.println(cntBefore)
+            deployProcess()
+            def cntAfter = flowableRepositoryService.deploymentsCount()
+            System.println(cntAfter)
+        then:
+            cntAfter > cntBefore
     }
 }

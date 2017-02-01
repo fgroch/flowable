@@ -4,6 +4,7 @@ import grails.config.Config
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.flowable.engine.repository.Deployment
+import org.flowable.engine.repository.DiagramLayout
 import org.flowable.engine.repository.ProcessDefinition
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
 import org.grails.io.support.ClassPathResource
@@ -110,12 +111,38 @@ class FlowableRepositoryServiceIntegrationSpec extends Specification {
 
     def "when process definition is suspended then after activation isProcessDefinitionSuspended service method should return false"() {
         when:
-        deployProcess()
-        flowableRepositoryService.suspendProcessDefinitionById(processDefinition.id)
-        boolean isSuspendedBefore = flowableRepositoryService.isProcessDefinitionSuspended(processDefinition.id)
-        flowableRepositoryService.activateProcessDefinitionById(processDefinition.id)
-        boolean isSuspendedAfter = flowableRepositoryService.isProcessDefinitionSuspended(processDefinition.id)
+            deployProcess()
+            flowableRepositoryService.suspendProcessDefinitionById(processDefinition.id)
+            boolean isSuspendedBefore = flowableRepositoryService.isProcessDefinitionSuspended(processDefinition.id)
+            flowableRepositoryService.activateProcessDefinitionById(processDefinition.id)
+            boolean isSuspendedAfter = flowableRepositoryService.isProcessDefinitionSuspended(processDefinition.id)
         then:
             isSuspendedBefore && !isSuspendedAfter
     }
+
+    def "when process definition is deployed then process model should not be null"() {
+        when:
+            deployProcess()
+            InputStream is = flowableRepositoryService.getProcessModel(processDefinition.id)
+        then:
+            is != null && is.available() > 0
+    }
+
+    def "when process definition is deployed then process diagram should not be null"() {
+        when:
+            deployProcess()
+            InputStream is = flowableRepositoryService.getProcessDiagramResource(processDefinition.key)
+        then:
+            is != null && is.available() > 0
+    }
+
+    def "when process definition is deployed then process diagram layout should not be null"() {
+        when:
+            deployProcess()
+            DiagramLayout diagramLayout = flowableRepositoryService.getProcessDiagramLayout(processDefinition.id)
+        then:
+            diagramLayout != null
+    }
+
+    //getProcessDiagramLayout
 }

@@ -5,6 +5,7 @@ import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.flowable.engine.repository.Deployment
 import org.flowable.engine.repository.ProcessDefinition
+import org.flowable.engine.runtime.ProcessInstance
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
 import org.grails.io.support.ClassPathResource
 import org.grails.io.support.Resource
@@ -58,6 +59,7 @@ class FlowableRuntimeServiceIntegrationSpec extends Specification {
     ProcessDefinition processDefinition
     String deploymentKey
     String deploymentId
+    ProcessInstance processInstance
 
     def setup() {
         r = new ClassPathResource("testX.bpmn20.xml")
@@ -70,6 +72,10 @@ class FlowableRuntimeServiceIntegrationSpec extends Specification {
         processDefinition = flowableRepositoryService.createProcessDefinitionQuery().processDefinitionKey("testX").singleResult()
     }
 
+    def startProcess() {
+        processInstance = flowableRuntimeService.startProcessInstanceByKey(processDefinition.key)
+    }
+
     def cleanup() {
 
     }
@@ -77,5 +83,15 @@ class FlowableRuntimeServiceIntegrationSpec extends Specification {
     def "when service is created runtime service is created"() {
         expect:
             flowableRuntimeService.runtimeService != null
+    }
+
+    def "when service is started executions count is incremented"() {
+        when:
+            deployProcess()
+            def cntBefore = flowableRuntimeService.createExecutionQuery().processDefinitionKey(processDefinition.key).count()
+            startProcess()
+            def cntAfter = flowableRuntimeService.createExecutionQuery().processDefinitionKey(processDefinition.key).count()
+        then:
+            cntAfter > cntBefore
     }
 }

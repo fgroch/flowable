@@ -6,6 +6,7 @@ import grails.transaction.Rollback
 import org.flowable.engine.repository.Deployment
 import org.flowable.engine.repository.ProcessDefinition
 import org.flowable.engine.runtime.ProcessInstance
+import org.flowable.engine.task.Task
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
 import org.grails.io.support.ClassPathResource
 import org.grails.io.support.Resource
@@ -88,5 +89,15 @@ class FlowableTaskServiceIntegrationSpec extends Specification {
         flowableRuntimeService.runtimeService != null
         flowableTaskService.taskService != null
         flowableRepositoryService.repositoryService != null
+    }
+
+    def "when process is started tasks count is greater than 0"() {
+        when:
+            deployProcess()
+            startProcess()
+            def cnt =  flowableTaskService.createTaskQuery().processDefinitionKey(processDefinition.key).count()
+            System.out.println(cnt)
+        then:
+            cnt > 0
     }
 }

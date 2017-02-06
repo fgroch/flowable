@@ -213,4 +213,15 @@ class FlowableTagLib {
 //mail-reply
         out << sb.toString()
     }
+
+    def taskForm = { attrs, body ->
+        def taskId = attrs.remove('taskId')
+        def title = attrs.remove('title') ?: 'Task'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
+        def action = attrs.remove('action') ?: 'resolveTask'
+        final StringBuilder sb = new StringBuilder()
+        sb.append("<div><form id ='' name=''>")
+        sb.append("</form></div>")
+        out << sb.toString()
+    }
 }

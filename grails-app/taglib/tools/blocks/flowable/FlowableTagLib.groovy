@@ -1,7 +1,11 @@
 package tools.blocks.flowable
 
+import org.flowable.engine.form.FormProperty
+
 class FlowableTagLib {
     static namespace = "flowable"
+
+    def flowableFormService
 
     def downloadDiagram = { attrs, body ->
         def deploymentKey = attrs.remove('deploymentKey')
@@ -216,13 +220,12 @@ class FlowableTagLib {
 
     def taskForm = { attrs, body ->
         def taskId = attrs.remove('taskId')
-        def title = attrs.remove('title') ?: 'Task'
-        def controller = attrs.remove('controller') ?: 'flowableTask'
-        def action = attrs.remove('action') ?: 'resolveTask'
-        final StringBuilder sb = new StringBuilder()
-        sb.append("<div><form id ='' name=''>")
-        sb.append("</form></div>")
-        out << sb.toString()
+        final String s = ""
+        if (taskId) {
+            def taskFormData = flowableFormService.getTaskFormData()
+            s = buildTaskFormControls(attrs, taskFormData)
+        }
+        out << s
     }
 
     def beanTaskForm = { attrs, body ->
@@ -240,7 +243,15 @@ class FlowableTagLib {
     }
 
     def startTaskForm = { attrs, body ->
+        def taskId = attrs.remove('taskId')
+        def title = attrs.remove('title') ?: 'Task'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
+        def action = attrs.remove('action') ?: 'resolveTask'
 
+        final StringBuilder sb = new StringBuilder()
+        sb.append("<div><form id ='' name=''>")
+        sb.append("</form></div>")
+        out << sb.toString()
     }
 
     def beanStartTaskForm = { attrs, body ->
@@ -255,5 +266,62 @@ class FlowableTagLib {
             sb.append("</form></div>")
         }
         out << sb.toString()
+    }
+
+    def buildTaskFormControls(attrs, taskFormData) {
+        def title = attrs.remove('title') ?: 'Task'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
+        def action = attrs.remove('action') ?: 'resolveTask'
+        final StringBuilder sb = new StringBuilder()
+        def formProperties = taskFormData.formProperties
+        sb.append("<div><form id ='' name=''>")
+        for (FormProperty fp in formProperties) {
+            switch (fp.type.name) {
+                case "string":
+                    sb.append(buildTaskTextInput(fp.properties))
+                    break
+                case "boolean":
+                    sb.append(buildTaskBooleanInput(fp.properties))
+                    break
+                case "date":
+                    sb.append(buildTaskDateInput(fp.properties))
+                    break
+                case "double":
+                    sb.append(buildTaskDoubleInput(fp.properties))
+                    break
+                case "enum":
+                    sb.append(buildTasDropdownInput(fp.properties))
+                    break
+                case "long":
+                    sb.append(buildTaskLongInput(fp.properties))
+                    break
+            }
+        }
+        sb.append("</form></div>")
+        sb.toString()
+    }
+
+    def buildTaskTextInput(attrs) {
+
+    }
+
+    def buildTaskDateInput(attrs) {
+
+    }
+
+    def buildTaskBooleanInput(attrs) {
+
+    }
+
+    def buildTaskLongInput(attrs) {
+
+    }
+
+    def buildTaskDoubleInput(attrs) {
+
+    }
+
+    def buildTasDropdownInput(attrs) {
+
     }
 }

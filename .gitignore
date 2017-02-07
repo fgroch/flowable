@@ -38,6 +38,7 @@
 #build files
 /build
 /build/.dependencies
+/build/dependencies
 
 #ide files
 .idea

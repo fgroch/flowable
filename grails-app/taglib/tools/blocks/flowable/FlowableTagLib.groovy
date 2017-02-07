@@ -224,4 +224,36 @@ class FlowableTagLib {
         sb.append("</form></div>")
         out << sb.toString()
     }
+
+    def beanTaskForm = { attrs, body ->
+        def bean = attrs.remove('bean')
+        def taskId = attrs.remove('taskId')
+        def title = attrs.remove('title') ?: 'Task'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
+        def action = attrs.remove('action') ?: 'resolveTask'
+        final StringBuilder sb = new StringBuilder()
+        if (!bean) {
+            sb.append("<div><form id ='' name=''>")
+            sb.append("</form></div>")
+        }
+        out << sb.toString()
+    }
+
+    def startTaskForm = { attrs, body ->
+
+    }
+
+    def beanStartTaskForm = { attrs, body ->
+        def bean = attrs.remove('bean')
+        def processId = attrs.remove('processId')
+        def title = attrs.remove('title') ?: 'Task'
+        def controller = attrs.remove('controller') ?: 'flowableTask'
+        def action = attrs.remove('action') ?: 'resolveTask'
+        final StringBuilder sb = new StringBuilder()
+        if (!bean || !processId) {
+            sb.append("<div><form id ='' name=''>")
+            sb.append("</form></div>")
+        }
+        out << sb.toString()
+    }
 }

@@ -1,4 +1,4 @@
-package tools.blocks.flowable.tools.blocks.flowable.task
+package tools.blocks.flowable.task
 
 import grails.validation.Validateable
 import org.flowable.engine.task.DelegationState

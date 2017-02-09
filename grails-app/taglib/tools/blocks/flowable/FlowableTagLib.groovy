@@ -302,7 +302,16 @@ class FlowableTagLib {
     }
 
     def buildTaskTextInput(attrs) {
-
+        StringBuilder sb = new StringBuilder()
+        def label = g.message(code: attrs.name) ?: attrs.name
+        sb.append("<div>")
+        sb.append('<div class="col-sm-2 control-label"><label>' + label + '</label></div>')
+        sb.append("<div class='col-sm-4'>")
+        sb.append(g.field(type: "text", name: attrs.name, value: attrs.value))
+        sb.append("</div>")
+        sb.append("</div>")
+        //isRequired
+        sb.toString()
     }
 
     def buildTaskDateInput(attrs) {

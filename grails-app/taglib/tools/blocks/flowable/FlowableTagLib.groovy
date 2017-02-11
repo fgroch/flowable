@@ -304,13 +304,20 @@ class FlowableTagLib {
     def buildTaskTextInput(attrs) {
         StringBuilder sb = new StringBuilder()
         def label = g.message(code: attrs.name) ?: attrs.name
+        def attrsToAppend = [:]
+        attrsToAppend.name = attrs.name
+        attrsToAppend.value = attrs.value
+        attrsToAppend.type = "text"
+        attrsToAppend.class = attrs.class ? attrs.class + " ${attrs.name} task-text-input form-control" : " ${attrs.name} task-text-input form-control"
+        if (attrs.isRequired) {
+            attrsToAppend.required = true
+        }
         sb.append("<div>")
         sb.append('<div class="col-sm-2 control-label"><label>' + label + '</label></div>')
-        sb.append("<div class='col-sm-4'>")
-        sb.append(g.field(type: "text", name: attrs.name, value: attrs.value))
+        sb.append("<div class='col-sm-4 task-text'>")
+        sb.append(g.field(attrsToAppend))
         sb.append("</div>")
         sb.append("</div>")
-        //isRequired
         sb.toString()
     }
 
@@ -319,7 +326,23 @@ class FlowableTagLib {
     }
 
     def buildTaskBooleanInput(attrs) {
-
+        StringBuilder sb = new StringBuilder()
+        def label = g.message(code: attrs.name) ?: attrs.name
+        def attrsToAppend = [:]
+        attrsToAppend.name = attrs.name
+        attrsToAppend.value = attrs.value
+        attrsToAppend.class = attrs.class ? attrs.class + " ${attrs.name} task-checkbox-input form-control" : " ${attrs.name} task-checkbox-input form-control"
+        if (attrs.isRequired) {
+            attrsToAppend.required = true
+        }
+        attrsToAppend.style = attrs.style ? attrs.style + "width: auto;" : "width: auto;"
+        sb.append("<div>")
+        sb.append('<div class="col-sm-2 control-label"><label>' + label + '</label></div>')
+        sb.append("<div class='col-sm-4 task-checkbox'>")
+        sb.append(g.checkBox(attrsToAppend))
+        sb.append("</div>")
+        sb.append("</div>")
+        sb.toString()
     }
 
     def buildTaskLongInput(attrs) {
@@ -331,6 +354,10 @@ class FlowableTagLib {
     }
 
     def buildTasDropdownInput(attrs) {
+
+    }
+
+    def buildTaskButtons() {
 
     }
 }

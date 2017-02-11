@@ -290,12 +290,13 @@ class FlowableTagLib {
                     sb.append(buildTaskDoubleInput(fp.properties))
                     break
                 case "enum":
-                    sb.append(buildTasDropdownInput(fp.properties))
+                    sb.append(buildTasDropdownInput(fp.properties, fp.type.getInformation("values")))
                     break
                 case "long":
                     sb.append(buildTaskLongInput(fp.properties))
                     break
             }
+
         }
         sb.append("</form></div>")
         sb.toString()
@@ -322,7 +323,23 @@ class FlowableTagLib {
     }
 
     def buildTaskDateInput(attrs) {
-
+        StringBuilder sb = new StringBuilder()
+        def label = g.message(code: attrs.name) ?: attrs.name
+        def attrsToAppend = [:]
+        attrsToAppend.name = attrs.name
+        attrsToAppend.value = attrs.value
+        attrsToAppend.class = attrs.class ? attrs.class + " ${attrs.name} task-datepicker-input form-control" : " ${attrs.name} task-datepicker-input form-control"
+        if (attrs.isRequired) {
+            attrsToAppend.required = true
+        }
+        attrsToAppend.style = attrs.style ? attrs.style + "width: auto;" : "width: auto;"
+        sb.append("<div>")
+        sb.append('<div class="col-sm-2 control-label"><label>' + label + '</label></div>')
+        sb.append("<div class='col-sm-4 task-datepicker'>")
+        sb.append(g.datePicker(attrsToAppend))
+        sb.append("</div>")
+        sb.append("</div>")
+        sb.toString()
     }
 
     def buildTaskBooleanInput(attrs) {
@@ -353,8 +370,26 @@ class FlowableTagLib {
 
     }
 
-    def buildTasDropdownInput(attrs) {
-
+    def buildTasDropdownInput(attrs, values) {
+        StringBuilder sb = new StringBuilder()
+        def label = g.message(code: attrs.name) ?: attrs.name
+        def attrsToAppend = [:]
+        attrsToAppend.name = attrs.name
+        attrsToAppend.value = attrs.value
+        attrsToAppend.from = values
+        attrsToAppend.optionKey="id"
+        attrsToAppend.optionValue="name"
+        attrsToAppend.class = attrs.class ? attrs.class + " ${attrs.name} task-select-input form-control" : " ${attrs.name} task-select-input form-control"
+        if (attrs.isRequired) {
+            attrsToAppend.required = true
+        }
+        sb.append("<div>")
+        sb.append('<div class="col-sm-2 control-label"><label>' + label + '</label></div>')
+        sb.append("<div class='col-sm-4 task-select'>")
+        sb.append(g.select(attrsToAppend))
+        sb.append("</div>")
+        sb.append("</div>")
+        sb.toString()
     }
 
     def buildTaskButtons() {

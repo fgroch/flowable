@@ -363,7 +363,23 @@ class FlowableTagLib {
     }
 
     def buildTaskLongInput(attrs) {
-
+        StringBuilder sb = new StringBuilder()
+        def label = g.message(code: attrs.name) ?: attrs.name
+        def attrsToAppend = [:]
+        attrsToAppend.name = attrs.name
+        attrsToAppend.value = attrs.value
+        attrsToAppend.type = "number"
+        attrsToAppend.class = attrs.class ? attrs.class + " ${attrs.name} task-long-input form-control" : " ${attrs.name} task-long-input form-control"
+        if (attrs.isRequired) {
+            attrsToAppend.required = true
+        }
+        sb.append("<div>")
+        sb.append('<div class="col-sm-2 control-label"><label>' + label + '</label></div>')
+        sb.append("<div class='col-sm-4 task-long'>")
+        sb.append(g.field(attrsToAppend))
+        sb.append("</div>")
+        sb.append("</div>")
+        sb.toString()
     }
 
     def buildTaskDoubleInput(attrs) {
@@ -379,6 +395,7 @@ class FlowableTagLib {
         attrsToAppend.from = values
         attrsToAppend.optionKey="id"
         attrsToAppend.optionValue="name"
+        attrsToAppend.valueMessagePrefix = "flowable.task"
         attrsToAppend.class = attrs.class ? attrs.class + " ${attrs.name} task-select-input form-control" : " ${attrs.name} task-select-input form-control"
         if (attrs.isRequired) {
             attrsToAppend.required = true

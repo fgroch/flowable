@@ -3,6 +3,7 @@ package tools.blocks
 import grails.config.Config
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
+import org.flowable.engine.form.StartFormData
 import org.flowable.engine.repository.Deployment
 import org.flowable.engine.repository.ProcessDefinition
 import org.flowable.engine.runtime.ProcessInstance
@@ -10,6 +11,7 @@ import org.grails.datastore.gorm.jdbc.DataSourceBuilder
 import org.grails.io.support.ClassPathResource
 import org.grails.io.support.Resource
 import spock.lang.Specification
+import tools.blocks.flowable.FlowableFormService
 import tools.blocks.flowable.FlowableRepositoryService
 import tools.blocks.flowable.FlowableRuntimeService
 import tools.blocks.flowable.FlowableTaskService
@@ -56,7 +58,7 @@ class FlowableFormServiceIntegrationSpec extends Specification {
 
     FlowableRepositoryService flowableRepositoryService
     FlowableRuntimeService flowableRuntimeService
-    FlowableTaskService flowableTaskService
+    FlowableFormService flowableFormService
     Resource r
     Deployment deployment
     ProcessDefinition processDefinition
@@ -65,14 +67,14 @@ class FlowableFormServiceIntegrationSpec extends Specification {
     ProcessInstance processInstance
 
     def setup() {
-        r = new ClassPathResource("testX.bpmn20.xml")
+        r = new ClassPathResource("testFormData.bpmn20.xml")
     }
 
     def deployProcess() {
-        deployment = flowableRepositoryService.createDeployment().addInputStream("testX", r.inputStream).key("testX").name("testX").deploy()
+        deployment = flowableRepositoryService.createDeployment().addInputStream("testFormData", r.inputStream).key("testFormData").name("testFormData").deploy()
         deploymentKey = deployment.key
         deploymentId = deployment.id
-        processDefinition = flowableRepositoryService.createProcessDefinitionQuery().processDefinitionKey("testX").singleResult()
+        processDefinition = flowableRepositoryService.createProcessDefinitionQuery().processDefinitionKey("testFormData").singleResult()
     }
 
     def startProcess() {
@@ -81,5 +83,36 @@ class FlowableFormServiceIntegrationSpec extends Specification {
 
     def cleanup() {
 
+    }
+
+    def "when service is created repository service is created"() {
+        expect:
+            flowableRepositoryService.repositoryService != null
+    }
+
+    def "when service is created form service is created"() {
+        expect:
+            flowableFormService.formService != null
+    }
+
+    def "when process definition is deployed deployment id won't be null"() {
+        when:
+            deployProcess()
+            deploymentId = deployment.id
+            System.println(deploymentId)
+        then:
+            deploymentId != null
+    }
+
+    def "when process is deployed StartFormProperties should not be empty"() {
+        when:
+            deployProcess()
+            StartFormData startFormData = flowableFormService.getStartFormData(processDefinition.id).getFormProperties()
+            System.out.println(startFormData)
+        //startProcess()
+        //def cnt =  flowableTaskService.createTaskQuery().processDefinitionKey(processDefinition.key).count()
+        //System.out.println(cnt)
+        then:
+            startFormData != null
     }
 }

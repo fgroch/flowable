@@ -7,55 +7,55 @@ import org.flowable.engine.form.TaskFormData
 import org.flowable.engine.runtime.ProcessInstance
 
 @Transactional
-class FlowableFormService {
+class FlowableFormPropertyService {
 
-    FormService formService
+    FormService formPropertyService
 
     StartFormData getStartFormData(String processDefinitionId) {
-        formService.getStartFormData(processDefinitionId)
+        formPropertyService.getStartFormData(processDefinitionId)
     }
 
     def getRenderedStartForm(String processDefinitionId) {
-        formService.getRenderedStartForm(processDefinitionId)
+        formPropertyService.getRenderedStartForm(processDefinitionId)
     }
 
     def getRenderedStartForm(String processDefinitionId, String formEngineName) {
-        formService.getRenderedStartForm(processDefinitionId, formEngineName)
+        formPropertyService.getRenderedStartForm(processDefinitionId, formEngineName)
     }
 
     ProcessInstance submitStartFormData(String processDefinitionId, Map<String, String> properties) {
-        formService.submitStartFormData(processDefinitionId, properties)
+        formPropertyService.submitStartFormData(processDefinitionId, properties)
     }
 
     ProcessInstance submitStartFormData(String processDefinitionId, String businessKey, Map<String, String> properties) {
-        formService.submitStartFormData(processDefinitionId, businessKey, properties)
+        formPropertyService.submitStartFormData(processDefinitionId, businessKey, properties)
     }
 
     TaskFormData getTaskFormData(String taskId) {
-        formService.getTaskFormData(taskId)
+        formPropertyService.getTaskFormData(taskId)
     }
 
     def getRenderedTaskForm(String taskId) {
-        formService.getRenderedTaskForm(taskId)
+        formPropertyService.getRenderedTaskForm(taskId)
     }
 
     def getRenderedTaskForm(String taskId, String formEngineName) {
-        formService.getRenderedTaskForm(taskId, formEngineName)
+        formPropertyService.getRenderedTaskForm(taskId, formEngineName)
     }
 
     def submitTaskFormData(String taskId, Map<String, String> properties) {
-        formService.submitTaskFormData(taskId, properties)
+        formPropertyService.submitTaskFormData(taskId, properties)
     }
 
     def saveFormData(String taskId, Map<String, String> properties) {
-        formService.saveFormData(taskId, properties)
+        formPropertyService.saveFormData(taskId, properties)
     }
 
     String getStartFormKey(String processDefinitionId) {
-        formService.getStartFormKey(processDefinitionId)
+        formPropertyService.getStartFormKey(processDefinitionId)
     }
 
     String getTaskFormKey(String processDefinitionId, String taskDefinitionKey) {
-        formService.getTaskFormKey(processDefinitionId, taskDefinitionKey)
+        formPropertyService.getTaskFormKey(processDefinitionId, taskDefinitionKey)
     }
 }

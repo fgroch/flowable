@@ -8,22 +8,20 @@ import org.flowable.engine.form.StartFormData
 import org.flowable.engine.repository.Deployment
 import org.flowable.engine.repository.ProcessDefinition
 import org.flowable.engine.runtime.ProcessInstance
-import org.flowable.form.spring.SpringFormEngineConfiguration
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
 import org.grails.io.support.ClassPathResource
 import org.grails.io.support.Resource
 import spock.lang.Specification
-import tools.blocks.flowable.FlowableFormService
+import tools.blocks.flowable.FlowableFormPropertyService
 import tools.blocks.flowable.FlowableRepositoryService
 import tools.blocks.flowable.FlowableRuntimeService
-import tools.blocks.flowable.FlowableTaskService
 
 /**
  * Created by fgroch on 03.02.17.
  */
 @Integration
 @Rollback
-class FlowableFormServiceIntegrationSpec extends Specification {
+class FlowableFormPropertyServiceIntegrationSpec extends Specification {
     static loadExternalBeans = true
 
     def doWithSpring = {
@@ -65,12 +63,12 @@ class FlowableFormServiceIntegrationSpec extends Specification {
             processEngineConfiguration = processEngineConfiguration
         }
 
-        formService(processEngine: "getFormService")
+        formPropertyService(processEngine: "getFormService")
         repositoryService(processEngine: "getRepositoryService")
         runtimeService(processEngine: "getRuntimeService")
     }
 
-    FlowableFormService flowableFormService
+    FlowableFormPropertyService flowableFormPropertyService
     FlowableRepositoryService flowableRepositoryService
     FlowableRuntimeService flowableRuntimeService
     Resource r
@@ -114,7 +112,7 @@ class FlowableFormServiceIntegrationSpec extends Specification {
 
     def "when service is created form service is created"() {
         expect:
-            flowableFormService.formService != null
+            flowableFormPropertyService.formPropertyService != null
     }
 
     def "when process definition is deployed deployment id won't be null"() {
@@ -129,7 +127,7 @@ class FlowableFormServiceIntegrationSpec extends Specification {
     def "when process is deployed StartFormData should not be empty"() {
         when:
             deployProcess()
-            StartFormData startFormData = flowableFormService.getStartFormData(processDefinition.id)
+            StartFormData startFormData = flowableFormPropertyService.getStartFormData(processDefinition.id)
         then:
             startFormData != null
     }
@@ -137,7 +135,7 @@ class FlowableFormServiceIntegrationSpec extends Specification {
     def "when process is deployed StartFormData should contain one enum and one string form data"() {
         when:
             deployProcess()
-            StartFormData startFormData = flowableFormService.getStartFormData(processDefinition.id)
+            StartFormData startFormData = flowableFormPropertyService.getStartFormData(processDefinition.id)
             boolean enumExists = false
             boolean stringExists = false
             for (FormProperty formProperty: startFormData.formProperties) {

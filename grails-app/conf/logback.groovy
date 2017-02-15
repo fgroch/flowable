@@ -37,3 +37,4 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
 else {
     root(ERROR, ['STDOUT'])
 }
+logger("blocks", INFO, ['STDOUT'], false)

@@ -82,6 +82,7 @@ Brief summary/description of the plugin.
             managementService(processEngine: "getManagementService")
             identityService(processEngine: "getIdentityService")
             runtimeService(processEngine: "getRuntimeService")
+            formService(processEngine: "getFormService")
 
         }
     }

@@ -3,10 +3,12 @@ package tools.blocks
 import grails.config.Config
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
+import org.flowable.engine.form.FormProperty
 import org.flowable.engine.form.StartFormData
 import org.flowable.engine.repository.Deployment
 import org.flowable.engine.repository.ProcessDefinition
 import org.flowable.engine.runtime.ProcessInstance
+import org.flowable.form.spring.SpringFormEngineConfiguration
 import org.grails.datastore.gorm.jdbc.DataSourceBuilder
 import org.grails.io.support.ClassPathResource
 import org.grails.io.support.Resource
@@ -38,6 +40,15 @@ class FlowableFormServiceIntegrationSpec extends Specification {
         transactionManager(org.springframework.jdbc.datasource.DataSourceTransactionManager) {
             dataSource = dataSource
         }
+        /*springFormEngineConfiguration(org.flowable.form.spring.SpringFormEngineConfiguration) {
+            transactionManager = transactionManager
+            dataSource = dataSource
+            databaseSchemaUpdate = true
+            asyncExecutorActivate = false
+            databaseSchemaUpdate = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.dbCreate")
+            deploymentResources = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentResources")
+            deploymentMode = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentMode")
+        }*/
         processEngineConfiguration(org.flowable.spring.SpringProcessEngineConfiguration) {
             transactionManager = transactionManager
             dataSource = dataSource
@@ -47,18 +58,21 @@ class FlowableFormServiceIntegrationSpec extends Specification {
             deploymentResources = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentResources")
             deploymentMode = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentMode")
         }
+        /*formEngine(org.flowable.form.spring.FormEngineFactoryBean) {
+            formEngineConfiguration = springFormEngineConfiguration
+        }*/
         processEngine(org.flowable.spring.ProcessEngineFactoryBean) {
             processEngineConfiguration = processEngineConfiguration
         }
+        
+        formService(processEngine: "getFormService")
         repositoryService(processEngine: "getRepositoryService")
         runtimeService(processEngine: "getRuntimeService")
-        formService(processEngine: "getFormService")
-
     }
 
+    FlowableFormService flowableFormService
     FlowableRepositoryService flowableRepositoryService
     FlowableRuntimeService flowableRuntimeService
-    FlowableFormService flowableFormService
     Resource r
     Deployment deployment
     ProcessDefinition processDefinition
@@ -74,7 +88,10 @@ class FlowableFormServiceIntegrationSpec extends Specification {
         deployment = flowableRepositoryService.createDeployment().addInputStream("testFormData", r.inputStream).key("testFormData").name("testFormData").deploy()
         deploymentKey = deployment.key
         deploymentId = deployment.id
-        processDefinition = flowableRepositoryService.createProcessDefinitionQuery().processDefinitionKey("testFormData").singleResult()
+        def procDefs = flowableRepositoryService.createProcessDefinitionQuery().processDefinitionKey("testFormData").list()
+        if (procDefs && procDefs.size() > 0) {
+            processDefinition = procDefs.get(0)
+        }
     }
 
     def startProcess() {
@@ -90,6 +107,11 @@ class FlowableFormServiceIntegrationSpec extends Specification {
             flowableRepositoryService.repositoryService != null
     }
 
+    def "when service is created runtime service is created"() {
+        expect:
+            flowableRuntimeService.runtimeService != null
+    }
+
     def "when service is created form service is created"() {
         expect:
             flowableFormService.formService != null
@@ -99,20 +121,34 @@ class FlowableFormServiceIntegrationSpec extends Specification {
         when:
             deployProcess()
             deploymentId = deployment.id
-            System.println(deploymentId)
+            System.out.println(deploymentId)
         then:
             deploymentId != null
     }
 
-    def "when process is deployed StartFormProperties should not be empty"() {
+    def "when process is deployed StartFormData should not be empty"() {
         when:
             deployProcess()
-            StartFormData startFormData = flowableFormService.getStartFormData(processDefinition.id).getFormProperties()
-            System.out.println(startFormData)
-        //startProcess()
-        //def cnt =  flowableTaskService.createTaskQuery().processDefinitionKey(processDefinition.key).count()
-        //System.out.println(cnt)
+            StartFormData startFormData = flowableFormService.getStartFormData(processDefinition.id)
         then:
             startFormData != null
+    }
+
+    def "when process is deployed StartFormData should contain one enum and one string form data"() {
+        when:
+            deployProcess()
+            StartFormData startFormData = flowableFormService.getStartFormData(processDefinition.id)
+            boolean enumExists = false
+            boolean stringExists = false
+            for (FormProperty formProperty: startFormData.formProperties) {
+                if ("string".equalsIgnoreCase(formProperty.type.name)) {
+                    stringExists = true
+                }
+                if ("enum".equalsIgnoreCase(formProperty.type.name)) {
+                    enumExists = true
+                }
+            }
+        then:
+            stringExists && enumExists
     }
 }

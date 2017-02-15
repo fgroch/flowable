@@ -2,7 +2,7 @@ package tools.blocks.flowable
 
 import grails.transaction.Transactional
 import org.flowable.bpmn.model.BpmnModel
-import org.flowable.dmn.api.DecisionTable
+import org.flowable.dmn.api.DmnDecisionTable
 import org.flowable.engine.RepositoryService
 import org.flowable.engine.app.AppModel
 import org.flowable.engine.common.api.FlowableException
@@ -264,7 +264,7 @@ class FlowableRepositoryService {
         repositoryService.validateProcess(bpmnModel)
     }
 
-    List<DecisionTable> getDecisionTablesForProcessDefinition(String processDefinitionId) {
+    List<DmnDecisionTable> getDecisionTablesForProcessDefinition(String processDefinitionId) {
         repositoryService.getDecisionTablesForProcessDefinition(processDefinitionId)
     }
 

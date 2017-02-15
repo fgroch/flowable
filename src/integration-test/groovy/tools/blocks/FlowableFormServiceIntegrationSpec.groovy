@@ -64,7 +64,7 @@ class FlowableFormServiceIntegrationSpec extends Specification {
         processEngine(org.flowable.spring.ProcessEngineFactoryBean) {
             processEngineConfiguration = processEngineConfiguration
         }
-        
+
         formService(processEngine: "getFormService")
         repositoryService(processEngine: "getRepositoryService")
         runtimeService(processEngine: "getRuntimeService")

@@ -73,11 +73,10 @@ Brief summary/description of the plugin.
                 deploymentResources = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentResources")
                 deploymentMode = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentMode")
             }
-            springFormEngineConfiguration(org.flowable.form.spring.SpringFormEngineConfiguration) {
+            formEngineConfiguration(org.flowable.form.spring.SpringFormEngineConfiguration) {
                 transactionManager = transactionManager
                 dataSource = dataSource
                 databaseSchemaUpdate = true
-                asyncExecutorActivate = false
                 databaseSchemaUpdate = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.dbCreate")
                 deploymentResources = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentResources")
                 deploymentMode = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentMode")
@@ -86,7 +85,7 @@ Brief summary/description of the plugin.
                 processEngineConfiguration = processEngineConfiguration
             }
             formEngine(org.flowable.form.spring.FormEngineFactoryBean) {
-                formEngineConfiguration = springFormEngineConfiguration
+                formEngineConfiguration = formEngineConfiguration
             }
             repositoryService(processEngine: "getRepositoryService")
             taskService(processEngine: "getTaskService")
@@ -97,6 +96,7 @@ Brief summary/description of the plugin.
             formPropertyService(processEngine: "getFormService")
 
             formService(formEngine: "getFormService")
+            formRepositoryService(formEngine: "getFormRepositoryService")
 
         }
     }

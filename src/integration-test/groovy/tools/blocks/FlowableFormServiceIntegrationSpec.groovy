@@ -45,11 +45,10 @@ class FlowableFormServiceIntegrationSpec extends Specification {
             deploymentResources = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentResources")
             deploymentMode = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentMode")
         }
-        springFormEngineConfiguration(org.flowable.form.spring.SpringFormEngineConfiguration) {
+        formEngineConfiguration(org.flowable.form.spring.SpringFormEngineConfiguration) {
             transactionManager = transactionManager
             dataSource = dataSource
             databaseSchemaUpdate = true
-            asyncExecutorActivate = false
             databaseSchemaUpdate = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.datasource.dbCreate")
             deploymentResources = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentResources")
             deploymentMode = conf.getProperty("environments.${grails.util.Environment.current.name}.flowable.deploymentMode")
@@ -58,7 +57,7 @@ class FlowableFormServiceIntegrationSpec extends Specification {
             processEngineConfiguration = processEngineConfiguration
         }
         formEngine(org.flowable.form.spring.FormEngineFactoryBean) {
-            formEngineConfiguration = springFormEngineConfiguration
+            formEngineConfiguration = formEngineConfiguration
         }
         repositoryService(processEngine: "getRepositoryService")
         runtimeService(processEngine: "getRuntimeService")
@@ -96,5 +95,29 @@ class FlowableFormServiceIntegrationSpec extends Specification {
 
     def cleanup() {
 
+    }
+
+    def "when service is created repository service is created"() {
+        expect:
+        flowableRepositoryService.repositoryService != null
+    }
+
+    def "when service is created runtime service is created"() {
+        expect:
+        flowableRuntimeService.runtimeService != null
+    }
+
+    def "when service is created form service is created"() {
+        expect:
+        flowableFormService.formService != null
+    }
+
+    def "when process definition is deployed deployment id won't be null"() {
+        when:
+        deployProcess()
+        deploymentId = deployment.id
+        System.out.println(deploymentId)
+        then:
+        deploymentId != null
     }
 }

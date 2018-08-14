@@ -8,6 +8,15 @@ This plugin provides integration with flowable BPM platform
 
 === Versions:
 * 0.1.0
+** Flowable services exposed as a beans
+** Flowable engine embedded in Grails app
+** Deployments (searching, viewing, addition, removing, editing)
+** Process handling (starting, searching, viewing, termination)
+** Tasks execution
+** Forms and forms properties handling (TagLib + service)
+* 0.2.0
+** Upgrade to flowable 6.3.1
+* 0.2.1
 ** Under development
 
 === Roadmap
@@ -20,4 +29,4 @@ This plugin provides integration with flowable BPM platform
 ** Tasks execution
 ** Forms and forms properties handling (TagLib + service)
 * Version 0.2.0:
-** Decision mechanism handling
+** Upgrade to flowable 6.3.1

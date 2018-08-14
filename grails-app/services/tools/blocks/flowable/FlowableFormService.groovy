@@ -2,10 +2,10 @@ package tools.blocks.flowable
 
 import grails.transaction.Transactional
 import org.flowable.form.api.FormInstance
+import org.flowable.form.api.FormInstanceInfo
 import org.flowable.form.api.FormInstanceQuery
+import org.flowable.form.api.FormModel
 import org.flowable.form.api.FormService
-import org.flowable.form.model.FormInstanceModel
-import org.flowable.form.model.FormModel
 
 @Transactional
 class FlowableFormService {
@@ -50,35 +50,35 @@ class FlowableFormService {
         formService.getFormModelWithVariablesByKeyAndParentDeploymentId(formDefinitionKey, parentDeploymentId, processInstanceId, variables, tenantId)
     }
 
-    FormInstanceModel getFormInstanceModelById(String formInstanceId, Map<String, Object> variables) {
+    FormInstanceInfo getFormInstanceModelById(String formInstanceId, Map<String, Object> variables) {
         formService.getFormInstanceModelById(formInstanceId, variables)
     }
 
-    FormInstanceModel getFormInstanceModelById(String formDefinitionId, String taskId, String processInstanceId, Map<String, Object> variables) {
+    FormInstanceInfo getFormInstanceModelById(String formDefinitionId, String taskId, String processInstanceId, Map<String, Object> variables) {
         formService.getFormInstanceModelById(formDefinitionId, taskId, processInstanceId, variables)
     }
 
-    FormInstanceModel getFormInstanceModelById(String formDefinitionId, String taskId, String processInstanceId,
+    FormInstanceInfo getFormInstanceModelById(String formDefinitionId, String taskId, String processInstanceId,
                                                Map<String, Object> variables, String tenantId) {
         formService.getFormInstanceModelById(formDefinitionId, taskId, processInstanceId, variables, tenantId)
     }
 
-    FormInstanceModel getFormInstanceModelByKey(String formDefinitionKey, String taskId, String processInstanceId, Map<String, Object> variables) {
+    FormInstanceInfo getFormInstanceModelByKey(String formDefinitionKey, String taskId, String processInstanceId, Map<String, Object> variables) {
         formService.getFormInstanceModelByKey(formDefinitionKey, taskId, processInstanceId, variables)
     }
 
-    FormInstanceModel getFormInstanceModelByKey(String formDefinitionKey, String taskId, String processInstanceId,
+    FormInstanceInfo getFormInstanceModelByKey(String formDefinitionKey, String taskId, String processInstanceId,
                                                 Map<String, Object> variables, String tenantId) {
         formService.getFormInstanceModelByKey(formDefinitionKey, taskId, processInstanceId, variables, tenantId)
     }
 
-    FormInstanceModel getFormInstanceModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId,
+    FormInstanceInfo getFormInstanceModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId,
                                                                      String taskId, String processInstanceId, Map<String, Object> variables) {
         formService.getFormInstanceModelByKeyAndParentDeploymentId(formDefinitionKey, parentDeploymentId, taskId,
                 processInstanceId, variables)
     }
 
-    FormInstanceModel getFormInstanceModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId,
+    FormInstanceInfo getFormInstanceModelByKeyAndParentDeploymentId(String formDefinitionKey, String parentDeploymentId,
                                                                      String taskId, String processInstanceId, Map<String, Object> variables, String tenantId) {
         formService.getFormInstanceModelByKeyAndParentDeploymentId(formDefinitionKey, parentDeploymentId, taskId,
                 processInstanceId, variables, tenantId)

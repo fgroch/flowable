@@ -1,8 +1,8 @@
 package tools.blocks.flowable
 
 import grails.transaction.Transactional
+import org.flowable.common.engine.api.FlowableObjectNotFoundException
 import org.flowable.engine.IdentityService
-import org.flowable.engine.common.api.FlowableObjectNotFoundException
 import org.flowable.idm.api.Group
 import org.flowable.idm.api.GroupQuery
 import org.flowable.idm.api.NativeGroupQuery

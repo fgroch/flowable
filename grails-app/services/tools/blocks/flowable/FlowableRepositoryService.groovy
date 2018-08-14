@@ -2,11 +2,11 @@ package tools.blocks.flowable
 
 import grails.transaction.Transactional
 import org.flowable.bpmn.model.BpmnModel
+import org.flowable.common.engine.api.FlowableException
+import org.flowable.common.engine.api.FlowableObjectNotFoundException
 import org.flowable.dmn.api.DmnDecisionTable
 import org.flowable.engine.RepositoryService
 import org.flowable.engine.app.AppModel
-import org.flowable.engine.common.api.FlowableException
-import org.flowable.engine.common.api.FlowableObjectNotFoundException
 import org.flowable.engine.repository.Deployment
 import org.flowable.engine.repository.DeploymentBuilder
 import org.flowable.engine.repository.DeploymentQuery
@@ -14,8 +14,8 @@ import org.flowable.engine.repository.DiagramLayout
 import org.flowable.engine.repository.Model
 import org.flowable.engine.repository.ProcessDefinition
 import org.flowable.engine.repository.ProcessDefinitionQuery
-import org.flowable.engine.task.IdentityLink
 import org.flowable.form.api.FormDefinition
+import org.flowable.identitylink.api.IdentityLink
 import org.flowable.validation.ValidationError
 
 import java.util.zip.ZipInputStream

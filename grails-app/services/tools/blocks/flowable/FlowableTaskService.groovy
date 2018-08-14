@@ -1,20 +1,20 @@
 package tools.blocks.flowable
 
 import grails.transaction.Transactional
+import org.flowable.common.engine.api.FlowableException
+import org.flowable.common.engine.api.FlowableObjectNotFoundException
 import org.flowable.engine.FlowableTaskAlreadyClaimedException
 import org.flowable.engine.TaskService
-import org.flowable.engine.common.api.FlowableException
-import org.flowable.engine.common.api.FlowableObjectNotFoundException
-import org.flowable.engine.impl.persistence.entity.VariableInstance
 import org.flowable.engine.runtime.DataObject
 import org.flowable.engine.task.Attachment
 import org.flowable.engine.task.Comment
 import org.flowable.engine.task.Event
-import org.flowable.engine.task.IdentityLink
-import org.flowable.engine.task.NativeTaskQuery
-import org.flowable.engine.task.Task
-import org.flowable.engine.task.TaskQuery
-import org.flowable.form.model.FormModel
+import org.flowable.form.api.FormModel
+import org.flowable.identitylink.api.IdentityLink
+import org.flowable.task.api.NativeTaskQuery
+import org.flowable.task.api.Task
+import org.flowable.task.api.TaskQuery
+import org.flowable.variable.api.persistence.entity.VariableInstance
 
 @Transactional
 class FlowableTaskService {

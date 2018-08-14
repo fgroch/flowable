@@ -1,7 +1,7 @@
 package tools.blocks.flowable
 
 import grails.transaction.Transactional
-import org.flowable.engine.common.api.FlowableObjectNotFoundException
+import org.flowable.common.engine.api.FlowableObjectNotFoundException
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest
 
 import static org.springframework.http.HttpStatus.*

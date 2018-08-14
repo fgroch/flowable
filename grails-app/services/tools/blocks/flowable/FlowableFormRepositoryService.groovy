@@ -5,10 +5,10 @@ import org.flowable.form.api.FormDefinition
 import org.flowable.form.api.FormDefinitionQuery
 import org.flowable.form.api.FormDeploymentBuilder
 import org.flowable.form.api.FormDeploymentQuery
+import org.flowable.form.api.FormModel
 import org.flowable.form.api.FormRepositoryService
 import org.flowable.form.api.NativeFormDefinitionQuery
 import org.flowable.form.api.NativeFormDeploymentQuery
-import org.flowable.form.model.FormModel
 
 @Transactional
 class FlowableFormRepositoryService {

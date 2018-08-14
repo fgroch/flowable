@@ -1,8 +1,8 @@
 package tools.blocks.flowable.task
 
 import grails.validation.Validateable
-import org.flowable.engine.task.DelegationState
-import org.flowable.engine.task.Task
+import org.flowable.task.api.DelegationState
+import org.flowable.task.api.Task
 
 /**
  * Created by fgroch on 21.01.17.
